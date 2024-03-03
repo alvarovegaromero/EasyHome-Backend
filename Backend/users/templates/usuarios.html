@@ -2,14 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
+    <title>Iniciar Sesión</title>
 </head>
 <body>
-    <h1>Lista de usuarios</h1>
-    <ul>
-        {% for usuario in usuarios %}
-        <li>{{ usuario.username }} - {{ usuario.email }} - {{ usuario.first_name }} - {{ usuario.last_name }}</li>
-        {% endfor %}
-    </ul>
+    <h1>Iniciar Sesión</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="id_username">Nombre de usuario:</label>
+            <input type="text" id="id_username" name="username">
+        </div>
+        <div>
+            <label for="id_password">Contraseña:</label>
+            <input type="password" id="id_password" name="password">
+        </div>
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    {% if login_success %}
+    <p>Bien!</p>
+    {% endif %}
 </body>
 </html>
