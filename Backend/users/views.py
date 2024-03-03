@@ -21,9 +21,5 @@ class LoginAPIView(APIView):
 class LogoutAPIView(APIView):
     def post(self, request):
         logout(request)
-
-        #response.delete_cookie('csrftoken')
-        #response.delete_cookie('sessionid')
-    
         return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
 
