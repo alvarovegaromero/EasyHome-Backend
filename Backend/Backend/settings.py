@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from Backend import local_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,10 +74,15 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-try:
-    from local_settings import *
-except ImportError:
-    pass
+DATABASES = {
+    'default': {
+        'ENGINE': local_settings.database_engine,
+        'NAME': local_settings.database_name,
+        'USER': local_settings.database_user,
+        'PASSWORD': local_settings.database_password,
+        'HOST': local_settings.database_host,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
