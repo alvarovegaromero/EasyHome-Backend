@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Iniciar Sesión</h1>
-    <form method="post">
+    <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div>
             <label for="id_username">Nombre de usuario:</label>
@@ -24,3 +24,4 @@
     {% endif %}
 </body>
 </html>
+
