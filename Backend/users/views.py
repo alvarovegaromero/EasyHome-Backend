@@ -16,7 +16,7 @@ class LoginAPIView(APIView):
         if user is not None:
             login(request, user)
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -25,6 +25,6 @@ class LogoutAPIView(APIView):
         if request.user.is_authenticated:
             request.user.auth_token.delete()
             logout(request)
-            return Response({'success': 'Logout successful'})
+            return Response({'success': 'Logout successful'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
