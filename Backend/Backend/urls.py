@@ -27,6 +27,6 @@ urlpatterns = [
         extra_context={'schema_url':'api_schema'}), 
         name='swagger'),
     path('admin/', admin.site.urls, name='admin'),
-    path('generate_token/', views.obtain_auth_token),
+    #path('generate_token/', views.obtain_auth_token),
     path('api/users/', include('users.urls'), name='users'),
 ]
