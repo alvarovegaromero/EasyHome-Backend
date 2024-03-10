@@ -2,10 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LoginAPIView(APIView):
     def post(self, request):
         username = request.data.get('username')
@@ -13,13 +11,16 @@ class LoginAPIView(APIView):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
         else:
-            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LogoutAPIView(APIView):
     def post(self, request):
-        logout(request)
-        return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
-
+        if request.user.is_authenticated:
+            request.user.auth_token.delete()
+            logout(request)
+            return Response({'success': 'Logout successful'})
+        else:
+            return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
