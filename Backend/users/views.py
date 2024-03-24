@@ -4,6 +4,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate, logout
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from django.core.validators import validate_email
 
 class LoginAPIView(APIView):
     def post(self, request):
@@ -33,16 +34,22 @@ class RegisterAPIView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
         email = request.data.get('email')
-        first_name = request.data.get('first_name')
-        last_name = request.data.get('last_name')
+        first_name = request.data.get('firstName', '')
+        last_name = request.data.get('lastName', '')
 
+        # Validations:
         if not username or not password or not email:
             return Response({'error': 'Username, password, and email are required'}, status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(email=email).exists():
             return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        if password != request.data.get('confirmPassword'):
+            return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        if not validate_email(email):
+            return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Processing:
         user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_201_CREATED)
