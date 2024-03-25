@@ -24,6 +24,8 @@ class LoginAPIView(APIView):
 class LogoutAPIView(APIView):
     def post(self, request):
         if request.user.is_authenticated:
+            # Delete the token when the user logout - Safer?
+            # request.user.auth_token.delete() 
             logout(request)
             return Response({'success': 'Logout successful'}, status=status.HTTP_200_OK)
         else:
