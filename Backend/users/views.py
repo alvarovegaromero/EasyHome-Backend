@@ -48,9 +48,12 @@ class RegisterAPIView(APIView):
             return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
         if password != request.data.get('confirmPassword'):
             return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
-        if not validate_email(email):
-            return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
-
+        
+        try:
+            validate_email(email)
+        except:
+            return Response({'error': 'Invalid email'}, status=status.HTTP_400_BAD_REQUEST)
+        
         # Processing:
         user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         token, created = Token.objects.get_or_create(user=user)
