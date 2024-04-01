@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.0.2.2', '192.168.1.50', '192.168.
 
 USE_X_FORWARDED_HOST = True
 
-CSRF_TRUSTED_ORIGINS = ['https://localhost']
+CSRF_TRUSTED_ORIGINS = ['https://localhost', 'https://192.168.1.50']
 
 # Application definition
 
