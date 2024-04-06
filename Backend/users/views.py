@@ -100,7 +100,6 @@ class ProfileAPIView(APIView):
                     return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
 
                 if username != user.username:
-                    # Verificar si el nuevo nombre de usuario ya está en uso
                     if User.objects.filter(username=username).exists():
                         return Response({'error': 'Username already in use'}, status=status.HTTP_400_BAD_REQUEST)
                     user.username = username
