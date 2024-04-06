@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, logout
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
+from django.core.mail import send_mail
 
 class LoginAPIView(APIView):
     def post(self, request):
@@ -124,3 +125,22 @@ class ProfileAPIView(APIView):
         except Exception as e:
             logger.error("An error occurred during profile update: %s" % str(e))
             return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ResetPasswordAPIView(APIView):
+    def post(self, request):
+        subject = 'Correo electrónico de prueba'
+        message = 'Este es un correo electrónico de prueba enviado desde Django.'
+        from_email = 'easyhome.applicationhelp@gmail.com'
+        to_email = ['vegaromeroalvaro@gmail.com'] 
+
+        try:
+            send_mail(subject, message, from_email, to_email)
+            return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error("An error occurred during log in: %s" % str(e))
+            return Response({'error': 'Email error when trying'}, status=status.HTTP_400_BAD_REQUEST)
+
+        """
+            email = request.data.get('email')
+            return Response("Not implemented", status=status.HTTP_501_NOT_IMPLEMENTED)
+        """
