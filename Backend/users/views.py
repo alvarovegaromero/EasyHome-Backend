@@ -117,13 +117,6 @@ class ProfileAPIView(APIView):
                 user.first_name = first_name
                 user.last_name = last_name
                 user.save()
-                
-                if not username or not email:
-                    return Response({'error': 'Username, password, and email are required'}, status=status.HTTP_400_BAD_REQUEST)
-                if User.objects.filter(username=username).exists():
-                    return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
-                if User.objects.filter(email=email).exists():
-                    return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
                 return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
             else:
