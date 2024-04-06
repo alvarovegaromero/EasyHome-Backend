@@ -72,3 +72,31 @@ class RegisterAPIView(APIView):
         except Exception as e:
             logger.error("An error occurred during user registration: %s" % str(e))
             return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ProfileAPIView(APIView):
+    def get(self, request):
+        try:
+            if request.user.is_authenticated:
+                return Response({'username': request.user.username, 'email': request.user.email, 'firstName': request.user.first_name, 'lastName': request.user.last_name}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger.error("An error occurred during profile retrieval: %s" % str(e))
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    """
+    def post(self, request):
+        try:
+            if request.user.is_authenticated:
+                user = request.user
+                user.first_name = request.data.get('firstName', user.first_name)
+                user.last_name = request.data.get('lastName', user.last_name)
+                user.email = request.data.get('email', user.email)
+                user.save()
+                return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger.error("An error occurred during profile update: %s" % str(e))
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    """
