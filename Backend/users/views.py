@@ -62,7 +62,7 @@ class RegisterAPIView(APIView):
             try:
                 validate_email(email)
             except:
-                return Response({'error': 'Invalid email'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
             
             # Processing:
             user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
@@ -88,10 +88,44 @@ class ProfileAPIView(APIView):
         try:
             if request.user.is_authenticated:
                 user = request.user
-                user.first_name = request.data.get('firstName', user.first_name)
-                user.last_name = request.data.get('lastName', user.last_name)
-                user.email = request.data.get('email', user.email)
+                username = request.data.get('username')
+                email = request.data.get('email')
+                first_name = request.data.get('firstName', '')
+                last_name = request.data.get('lastName', '')
+
+                if not username:
+                    return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+                if not email:
+                    return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+                if username != user.username:
+                    # Verificar si el nuevo nombre de usuario ya está en uso
+                    if User.objects.filter(username=username).exists():
+                        return Response({'error': 'Username already in use'}, status=status.HTTP_400_BAD_REQUEST)
+                    user.username = username
+
+                if email != user.email:
+                    if User.objects.filter(email=email).exclude(username=user.username).exists():
+                        return Response({'error': 'Email already in use'}, status=status.HTTP_400_BAD_REQUEST)
+
+                try:
+                    validate_email(email)
+                except:
+                    return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
+
+                user.email = email
+                user.first_name = first_name
+                user.last_name = last_name
                 user.save()
+                
+                if not username or not email:
+                    return Response({'error': 'Username, password, and email are required'}, status=status.HTTP_400_BAD_REQUEST)
+                if User.objects.filter(username=username).exists():
+                    return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+                if User.objects.filter(email=email).exists():
+                    return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
                 return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
