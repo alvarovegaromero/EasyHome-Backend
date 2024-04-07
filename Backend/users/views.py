@@ -1,4 +1,6 @@
+from platform import node
 from venv import logger
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +9,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.mail import send_mail
+
+from Backend.settings import BASE_URL
+from users.reset_password import generate_reset_url, get_user_by_email, reset_password_with_token
 
 class LoginAPIView(APIView):
     def post(self, request):
@@ -129,11 +134,18 @@ class ProfileAPIView(APIView):
 class ResetPasswordAPIView(APIView):
     def post(self, request):
         email = request.data.get('email')
+        user = get_user_by_email(email)
+
+        if user == None:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND) 
+
+        reset_url = generate_reset_url(user)
+        reset_url = BASE_URL + reset_url
 
         subject = 'Password Reset (EasyHome)'
-        message = 'This email has been seent with Django as a prove'
         from_email = 'easyhome.applicationhelp@gmail.com'
         to_email = [email] 
+        message = 'Hi ' + user.username + '\n\nThe link for resetting your password is: ' + reset_url + '\n\nBest regards,\nEasyHome Team'
 
         try:
             send_mail(subject, message, from_email, to_email, fail_silently=False)
@@ -141,8 +153,21 @@ class ResetPasswordAPIView(APIView):
         except Exception as e:
             logger.error("An error occurred during log in: %s" % str(e))
             return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-from django.shortcuts import render
 
 def reset_password(request):
     return render(request, 'password_reset.html')
+
+class ResetPasswordRequestAPIView(APIView):
+    def post(self, request):
+        token = request.data.get('token')
+        new_password = request.data.get('new_password')
+        confirm_password = request.data.get('confirm_password')
+
+        if new_password != confirm_password:
+            return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+
+        success, message = reset_password_with_token(token, new_password)
+        if success:
+            return Response({'success': message}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': message}, status=status.HTTP_400_BAD_REQUEST)
