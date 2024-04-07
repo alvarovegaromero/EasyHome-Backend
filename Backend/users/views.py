@@ -145,7 +145,12 @@ class ResetPasswordAPIView(APIView):
         subject = 'Password Reset (EasyHome)'
         from_email = 'easyhome.applicationhelp@gmail.com'
         to_email = [email] 
-        message = 'Hi ' + user.username + '\n\nThe link for resetting your password is: ' + reset_url + '\n\nBest regards,\nEasyHome Team'
+        message = (
+            'Hi ' + user.username + '\n\n' +
+            'The link for resetting your password is: ' + reset_url + '\n\n' +
+            'Best regards,\n' +
+            'EasyHome Team'
+        )
 
         try:
             send_mail(subject, message, from_email, to_email, fail_silently=False)

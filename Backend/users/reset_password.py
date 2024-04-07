@@ -42,8 +42,8 @@ def reset_password_with_token(token, new_password):
         if token_generator.check_token(user, token):
             user.set_password(new_password)
             user.save()
-            return True, "Password reset successfully."
+            return True, "Password changed successfully."
         else:
-            return False, "Invalid token."
+            return False, "Invalid token. The token is not valid for resetting the password."
     except (UserTokenResetPassword.DoesNotExist, TypeError, ValueError, OverflowError):
-        return False, "Invalid token."
+        return False, "Invalid token. The token provided does not exist or is malformed."
