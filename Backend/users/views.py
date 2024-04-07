@@ -128,19 +128,16 @@ class ProfileAPIView(APIView):
         
 class ResetPasswordAPIView(APIView):
     def post(self, request):
-        subject = 'Correo electrónico de prueba'
-        message = 'Este es un correo electrónico de prueba enviado desde Django.'
+        email = request.data.get('email')
+
+        subject = 'Password Reset (EasyHome)'
+        message = 'This email has been seent with Django as a prove'
         from_email = 'easyhome.applicationhelp@gmail.com'
-        to_email = ['vegaromeroalvaro@gmail.com'] 
+        to_email = [email] 
 
         try:
-            send_mail(subject, message, from_email, to_email)
-            return Response({'success': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+            send_mail(subject, message, from_email, to_email, fail_silently=False)
+            return Response({'success': 'Email sent succesfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error("An error occurred during log in: %s" % str(e))
-            return Response({'error': 'Email error when trying'}, status=status.HTTP_400_BAD_REQUEST)
-
-        """
-            email = request.data.get('email')
-            return Response("Not implemented", status=status.HTTP_501_NOT_IMPLEMENTED)
-        """
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
