@@ -159,7 +159,7 @@ class ResetPasswordAPIView(APIView):
             logger.error("An error occurred during log in: %s" % str(e))
             return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-def reset_password(request):
+def render_reset_password_page(request):
     return render(request, 'password_reset.html')
 
 class ResetPasswordRequestAPIView(APIView):
