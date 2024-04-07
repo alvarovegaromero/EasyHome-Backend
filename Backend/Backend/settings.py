@@ -33,6 +33,12 @@ USE_X_FORWARDED_HOST = True
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost', 'https://192.168.1.50', 'https://192.168.78.213']
 
+BASE_URL_NORMAL_NETWORK = 'https://192.168.1.50';
+BASE_URL_HOTSPOT_NETWORK= 'https://192.168.78.213';
+
+BASE_URL = BASE_URL_NORMAL_NETWORK; #Switch when needed
+
+
 # Application definition
 
 INSTALLED_APPS = [
