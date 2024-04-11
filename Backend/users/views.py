@@ -51,19 +51,20 @@ class RegisterAPIView(APIView):
         try:
             username = request.data.get('username')
             password = request.data.get('password')
+            confirmation_password = request.data.get('confirmPassword')
             email = request.data.get('email')
             first_name = request.data.get('firstName', '')
             last_name = request.data.get('lastName', '')
 
             # Validations:
-            if not username or not password or not email:
-                return Response({'error': 'Username, password, and email are required'}, status=status.HTTP_400_BAD_REQUEST)
+            if not username or not password or not confirmation_password or not email:
+                return Response({'error': 'Username, password, confirmation password and email are required'}, status=status.HTTP_400_BAD_REQUEST)
+            if password != confirmation_password:
+                return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
             if User.objects.filter(username=username).exists():
                 return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
             if User.objects.filter(email=email).exists():
                 return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
-            if password != request.data.get('confirmPassword'):
-                return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
             
             try:
                 validate_email(email)
