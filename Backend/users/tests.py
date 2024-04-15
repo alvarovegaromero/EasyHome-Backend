@@ -1,47 +1,39 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
+from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from .views import LoginAPIView
+from rest_framework import status
 
 class LoginAPIViewTest(TestCase):
+
     def setUp(self):
-        self.factory = RequestFactory()
+        self.client = APIClient()
         self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpassword')
         self.view = LoginAPIView.as_view()
+        self.url = '/api/users/login'
 
     def test_login_success(self):
-        request = self.factory.post('/login/', {'username': 'testuser', 'password': 'testpassword'})
-        request.user = self.user
-        response = self.view(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['username'], 'testuser')
+        response = self.client.post(self.url, {'username': 'testuser', 'password': 'testpassword'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue('token' in response.data)
+        self.assertEqual(response.data['username'], 'testuser')
 
     def test_login_no_username(self):
-        request = self.factory.post('/login/', {'password': 'testpassword'})
-        request.user = self.user
-        response = self.view(request)
+        response = self.client.post(self.url, {'password': 'testpassword'}, format='json')
         self.assertEqual(response.status_code, 400)
-    
+
     def test_login_no_password(self):
-        request = self.factory.post('/login/', {'username': 'testuser'})
-        request.user = self.user
-        response = self.view(request)
+        response = self.client.post(self.url, {'username': 'testuser'}, format='json')
         self.assertEqual(response.status_code, 400)
-    
+
     def test_login_no_username_no_password(self):
-        request = self.factory.post('/login/', {})
-        request.user = self.user
-        response = self.view(request)
+        response = self.client.post(self.url, {}, format='json')
         self.assertEqual(response.status_code, 400)
 
     def test_login_wrong_password(self):
-        request = self.factory.post('/login/', {'username': 'testuser', 'password': 'wrongpassword'})
-        request.user = self.user
-        response = self.view(request)
-        self.assertEqual(response.status_code, 401)   
+        response = self.client.post(self.url, {'username': 'testuser', 'password': 'wrongpassword'}, format='json')
+        self.assertEqual(response.status_code, 401)
 
     def test_login_non_existent_user(self):
-        request = self.factory.post('/login/', {'username': 'nonexistentuser', 'password': 'testpassword'})
-        request.user = self.user
-        response = self.view(request)
+        response = self.client.post(self.url, {'username': 'nonexistentuser', 'password': 'testpassword'}, format='json')
         self.assertEqual(response.status_code, 401)
