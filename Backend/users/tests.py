@@ -98,3 +98,34 @@ class RegisterAPIViewTest(TestCase):
         response = self.client.post(self.url, {'username': 'testuser', 'password': 'testpassword', 'confirmPassword': 'testpassword', 'email': 'invalidemail'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'], 'Invalid email format')
+
+class ProfileAPIViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpassword')
+        self.token = Token.objects.create(user=self.user)
+        self.url = '/api/users/profile'
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_get_profile_authenticated(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['username'], 'testuser')
+        self.assertEqual(response.data['email'], 'testuser@test.com')
+
+    def test_get_profile_not_authenticated(self):
+        self.client.credentials()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error'], 'User is not authenticated')
+
+    def test_post_profile_authenticated(self):
+        response = self.client.post(self.url, {'username': 'newuser', 'email': 'newuser@test.com'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['success'], 'Profile updated successfully')
+
+    def test_post_profile_not_authenticated(self):
+        self.client.credentials()
+        response = self.client.post(self.url, {'username': 'newuser', 'email': 'newuser@test.com'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error'], 'User is not authenticated')
