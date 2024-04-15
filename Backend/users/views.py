@@ -1,4 +1,3 @@
-from platform import node
 from venv import logger
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -9,7 +8,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.mail import send_mail
-
 from Backend.settings import BASE_URL
 from users.reset_password import generate_reset_url, get_user_by_email, reset_password_with_token
 
