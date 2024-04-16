@@ -1,6 +1,14 @@
 from django.urls import path
-from .views import LoginAPIView, LogoutAPIView, ProfileAPIView, RegisterAPIView, ResetPasswordAPIView, ResetPasswordRequestAPIView
-from .views import render_reset_password_page
+from .views.login.LoginAPIView import LoginAPIView
+from .views.logout.LogoutAPIView import LogoutAPIView
+from .views.profile.ProfileAPIView import ProfileAPIView
+from .views.register.RegisterAPIView import RegisterAPIView
+from .views.reset_password.ResetPasswordAPIView import ResetPasswordAPIView
+from .views.reset_password.ResetPasswordRequestAPIView import ResetPasswordRequestAPIView
+from django.shortcuts import render
+
+def render_reset_password_page(request):
+    return render(request, 'password_reset.html')
 
 urlpatterns = [
     path('login', LoginAPIView.as_view(), name='login'),
