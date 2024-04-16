@@ -11,7 +11,7 @@ class ResetPasswordAPIViewTest(TestCase):
         self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpassword')
         self.url = '/api/users/reset-password'
 
-    @patch('users.views.send_mail') #Mocking the send_mail function
+    @patch('users.views.reset_password.reset_password_view.send_mail') #Mocking the send_mail function
     def test_post_reset_password_valid_email(self, mock_send_mail):
             response = self.client.post(self.url, {'email': 'testuser@test.com'}, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
