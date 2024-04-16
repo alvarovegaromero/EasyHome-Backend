@@ -1,10 +1,10 @@
 from django.urls import path
-from .views.login.LoginAPIView import LoginAPIView
-from .views.logout.LogoutAPIView import LogoutAPIView
-from .views.profile.ProfileAPIView import ProfileAPIView
-from .views.register.RegisterAPIView import RegisterAPIView
-from .views.reset_password.ResetPasswordAPIView import ResetPasswordAPIView
-from .views.reset_password.ResetPasswordRequestAPIView import ResetPasswordRequestAPIView
+from .views.login.login_view import LoginAPIView
+from .views.logout.logout_view import LogoutAPIView
+from .views.profile.profile_view import ProfileAPIView
+from .views.register.register_view import RegisterAPIView
+from .views.reset_password.reset_password_view import ResetPasswordAPIView
+from .views.reset_password.reset_password_request_view import ResetPasswordRequestAPIView
 from django.shortcuts import render
 
 def render_reset_password_page(request):
