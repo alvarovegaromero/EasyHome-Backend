@@ -182,7 +182,7 @@ class ResetPasswordAPIViewTest(TestCase):
         self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpassword')
         self.url = '/api/users/reset-password'
 
-    @patch('users.views.send_mail')
+    @patch('users.views.send_mail') #Mocking the send_mail function
     def test_post_reset_password_valid_email(self, mock_send_mail):
             response = self.client.post(self.url, {'email': 'testuser@test.com'}, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -194,5 +194,27 @@ class ResetPasswordAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'User not found')
 
+class ResetPasswordRequestAPIViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpassword')
+        self.url = '/api/users/reset-password-request'
 
-#class ResetPasswordRequestAPIView(APIView):
+    @patch('users.views.reset_password_with_token')
+    def test_post_reset_password_valid_token_and_matching_passwords(self, mock_reset_password_with_token):
+        mock_reset_password_with_token.return_value = (True, 'Password reset successfully')
+        response = self.client.post(self.url, {'token': 'validtoken', 'new_password': 'newpassword', 'confirm_password': 'newpassword'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['success'], 'Password reset successfully')
+
+    def test_post_reset_password_non_matching_passwords(self):
+        response = self.client.post(self.url, {'token': 'validtoken', 'new_password': 'newpassword', 'confirm_password': 'wrongpassword'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], 'Passwords do not match')
+
+    @patch('users.views.reset_password_with_token')
+    def test_post_reset_password_invalid_token(self, mock_reset_password_with_token):
+        mock_reset_password_with_token.return_value = (False, 'Invalid token')
+        response = self.client.post(self.url, {'token': 'invalidtoken', 'new_password': 'newpassword', 'confirm_password': 'newpassword'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], 'Invalid token')
