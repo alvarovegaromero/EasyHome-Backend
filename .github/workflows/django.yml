@@ -29,6 +29,10 @@ jobs:
       run: |
         cd Backend
         pipenv install
+    - name: Install Django
+      run: |
+        cd Backend
+        pipenv run pip install Django
     - name: Run Tests
       run: |
         cd Backend
