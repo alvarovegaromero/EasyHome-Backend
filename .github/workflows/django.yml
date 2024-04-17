@@ -21,18 +21,10 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Pipenv
-      run: |
-        cd Backend
-        python -m pip install pipenv
     - name: Install Dependencies
       run: |
         cd Backend
-        pipenv install
-    - name: Install Django
-      run: |
-        cd Backend
-        pipenv run pip install Django
+        python -m pip install Django
     - name: Run Tests
       run: |
         cd Backend
