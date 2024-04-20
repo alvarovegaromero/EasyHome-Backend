@@ -27,6 +27,16 @@ jobs:
     - name: Install Django
       run: |
         pip install Django
+        - name: Set up Django settings
+      env:
+        DATABASE_ENGINE: ${{ secrets.DATABASE_ENGINE }}
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+        DATABASE_USER: ${{ secrets.DATABASE_USER }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+      run: |
+        echo "from Backend import local_settings" > Backend/Backend/__init__.py
     - name: Run Tests
       run: |
         cd Backend
