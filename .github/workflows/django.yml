@@ -27,7 +27,7 @@ jobs:
     - name: Install Django
       run: |
         pip install Django
-        - name: Set up Django settings
+    - name: Set up Django settings
       env:
         DATABASE_ENGINE: ${{ secrets.DATABASE_ENGINE }}
         DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
