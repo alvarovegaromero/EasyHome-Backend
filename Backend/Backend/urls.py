@@ -28,4 +28,5 @@ urlpatterns = [
         name='swagger'),
     path('admin/', admin.site.urls, name='admin'),
     path('api/users/', include('users.urls'), name='users'),
+    #dummy
 ]
