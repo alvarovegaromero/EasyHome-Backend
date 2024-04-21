@@ -7,7 +7,7 @@ from .views.reset_password.reset_password_view import ResetPasswordAPIView
 from .views.reset_password.reset_password_request_view import ResetPasswordRequestAPIView
 from django.shortcuts import render
 
-def render_reset_password_page(request):
+def render_reset_password_page(request): #didn't know where to place. maybe inside a view?
     return render(request, 'password_reset.html')
 
 urlpatterns = [
