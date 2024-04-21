@@ -11,6 +11,16 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        # If this is a new group (i.e., it doesn't have an ID yet), 
+        # we'll create a UserGroup entry after saving. - To ensure the owner is a member of the group
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if is_new:
+            UserGroup.objects.create(user=self.owner, group=self)
 
 class UserGroup(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
