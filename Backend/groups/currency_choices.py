@@ -6,5 +6,5 @@ currency_choices = [
     ('CNY', 'Chinese Yuan'),
     ('CAD', 'Canadian Dollar'),
     ('AUD', 'Australian Dollar'),
-    ('OTHER', 'Other'),
+    ('XXX', 'Other'),
 ]
