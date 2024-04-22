@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound, PermissionDenied
 from groups.models import UserGroup
 
+
 class GroupsAPIView(APIView):
     permission_classes = (IsAuthenticated,) #Error 403
 
@@ -28,5 +29,4 @@ class GroupsAPIView(APIView):
                         for user_group in user_groups
                     ]  
         return Response({'groups': group_data}, status=status.HTTP_200_OK)
-        
         
