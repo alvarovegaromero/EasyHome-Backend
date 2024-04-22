@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from groups.models import Group
+from groups.models import Group, UserGroup
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,6 +11,10 @@ class GroupAPIView(APIView):
 
     def get(self, request, group_id):
         group = get_object_or_404(Group, pk=group_id)
+
+        if not UserGroup.objects.filter(user=request.user, group=group).exists():
+            return Response({'error': 'You do not belong to this group.'}, status=status.HTTP_403_FORBIDDEN)
+        
         group_data = {
             'id': group.id,
             'name': group.name,
