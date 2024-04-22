@@ -11,11 +11,11 @@ class GroupCreateAPIView(APIView):
 
     def post(self, request):
         name = request.data.get('name')
-        description = request.data.get('description')
+        description = request.data.get('description', '') #empty string if not provided
         currency = request.data.get('currency')
 
-        if not name or not description or not currency:
-            return Response({'error': 'Name, description and currency are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not name or not currency:
+            return Response({'error': 'Name and currency are required'}, status=status.HTTP_400_BAD_REQUEST)
         
         with transaction.atomic():
             group = Group.objects.create(

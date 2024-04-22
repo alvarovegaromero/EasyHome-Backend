@@ -4,7 +4,7 @@ from .currency_choices import currency_choices
 
 class Group(models.Model):
     name = models.CharField(max_length=35)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     currency = models.CharField(max_length=3, choices=currency_choices)
     creation_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_groups') # accesible using user.owned_groups
