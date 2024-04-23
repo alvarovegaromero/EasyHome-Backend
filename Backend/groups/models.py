@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .currency_choices import currency_choices
+import secrets
+import string
+from django.utils import timezone
+from datetime import timedelta
+
 
 class Group(models.Model):
     name = models.CharField(max_length=35)
@@ -8,6 +13,20 @@ class Group(models.Model):
     currency = models.CharField(max_length=3, choices=currency_choices)
     creation_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_groups') # accesible using user.owned_groups
+    join_code = models.CharField(max_length=30, unique=True, null=True, blank=True)
+    join_code_expiration = models.DateTimeField(null=True, blank=True)
+
+    def generate_join_code(self):
+        alphabet = string.ascii_letters + string.digits #generate letters and digits
+        while True:
+            join_code = ''.join(secrets.choice(alphabet) for i in range(30))
+            # Check if the generated code already exists and if it has expired. If no, break the loop
+            if not Group.objects.filter(join_code=join_code, join_code_expiration__gt=timezone.now()).exists():
+                self.join_code = join_code
+                break
+        self.join_code_expiration = timezone.now() + timedelta(weeks=1)
+        self.save()
+        return self.join_code
 
     def __str__(self):
         return self.name
