@@ -11,7 +11,7 @@ class GroupJoinAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        join_code = request.data.get('join_code')
+        join_code = request.data.get('joinCode')
 
         if not join_code:
             return Response({'error': 'Join code is required'}, status=status.HTTP_400_BAD_REQUEST)
