@@ -4,7 +4,7 @@ from .views.create_group_view import GroupCreateAPIView
 from .views.group_view import GroupAPIView
 from .views.leave_group_view import GroupLeaveAPIView
 from .views.join_group_view import GroupJoinAPIView
-from .views.generate_join_code_view import GroupGenerateCodeAPIView
+from .views.get_join_code_view import GroupGenerateCodeAPIView
 
 urlpatterns = [
     path('<str:user_id>/groups', GroupsAPIView.as_view(), name='groups'),
