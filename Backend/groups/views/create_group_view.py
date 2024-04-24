@@ -1,3 +1,4 @@
+from venv import logger
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from groups.models import Group
@@ -38,4 +39,6 @@ class GroupCreateAPIView(APIView):
             return Response(group_data, status=status.HTTP_201_CREATED) 
         
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            logger.error("An error occurred during group creation: %s" % str(e))
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
