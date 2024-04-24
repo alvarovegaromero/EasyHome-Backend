@@ -30,7 +30,6 @@ class GroupCreateAPIViewTest(TestCase):
         self.client.credentials()
         response = self.client.post(self.url, {'name': 'Test Group', 'description': 'Test Description', 'currency': 'EUR'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        print(response.data)
         self.assertEqual(response.data['detail'], 'Authentication credentials were not provided.')
 
     def test_create_group_no_name(self):
