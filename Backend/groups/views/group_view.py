@@ -1,3 +1,4 @@
+from venv import logger
 from django.shortcuts import get_object_or_404
 from groups.models import Group, UserGroup
 from rest_framework.permissions import IsAuthenticated
@@ -12,28 +13,38 @@ class GroupAPIView(APIView):
     def get(self, request, group_id):
         group = get_object_or_404(Group, pk=group_id)
 
-        if not UserGroup.objects.filter(user=request.user, group=group).exists():
-            return Response({'error': 'You do not belong to this group.'}, status=status.HTTP_403_FORBIDDEN)
+        try:
+            if not UserGroup.objects.filter(user=request.user, group=group).exists():
+                return Response({'error': 'You do not belong to this group.'}, status=status.HTTP_403_FORBIDDEN)
+            
+            group_data = {
+                'id': group.id,
+                'name': group.name,
+                'description': group.description,
+                'currency': group.currency,
+                'creation_date': group.creation_date,
+                'owner': group.owner.username,
+            }
+            
+            return Response(group_data, status=status.HTTP_200_OK)
         
-        group_data = {
-            'id': group.id,
-            'name': group.name,
-            'description': group.description,
-            'currency': group.currency,
-            'creation_date': group.creation_date,
-            'owner': group.owner.username,
-        }
-        
-        return Response(group_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error("An error occurred during group creation: %s" % str(e))
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     def post(self, request, group_id):
         group = get_object_or_404(Group, pk=group_id)
 
-        if request.user != group.owner:
-            return Response({'error': 'You do not have permission to delete this group.'}, status=status.HTTP_403_FORBIDDEN)
+        try:
+            if request.user != group.owner:
+                return Response({'error': 'You do not have permission to delete this group.'}, status=status.HTTP_403_FORBIDDEN)
 
-        group.delete()
+            group.delete()
 
-        return Response({'success': 'Group deleted successfully'}, status=status.HTTP_200_OK)
+            return Response({'success': 'Group deleted successfully'}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            logger.error("An error occurred during group creation: %s" % str(e))
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
