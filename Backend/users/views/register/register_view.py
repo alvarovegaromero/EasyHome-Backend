@@ -35,7 +35,7 @@ class RegisterAPIView(APIView):
             # Processing:
             user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key, 'username': username}, status=status.HTTP_201_CREATED)
+            return Response({'token': token.key, 'username': username, 'id': user.id}, status=status.HTTP_201_CREATED)
         
         except Exception as e:
             logger.error("An error occurred during user registration: %s" % str(e))
