@@ -1,4 +1,4 @@
-currency_choices = [
+CURRENCY_CHOICES = [
     ('USD', 'American Dollar'),
     ('EUR', 'Euro'),
     ('JPY', 'Japanese Yen'),

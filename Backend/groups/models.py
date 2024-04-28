@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from .currency_choices import currency_choices
+from .currency_choices import CURRENCY_CHOICES
 import secrets
 import string
 from django.utils import timezone
@@ -10,7 +10,7 @@ from datetime import timedelta
 class Group(models.Model):
     name = models.CharField(max_length=35)
     description = models.TextField(blank=True)
-    currency = models.CharField(max_length=3, choices=currency_choices)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)
     creation_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_groups') # accesible using user.owned_groups
     join_code = models.CharField(max_length=30, unique=True, null=True, blank=True)
