@@ -32,7 +32,7 @@ class GroupAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_group_owner(self):
-        response = self.client.post(self.url)
+        response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['success'], 'Group deleted successfully')
 
@@ -40,7 +40,7 @@ class GroupAPIViewTest(TestCase):
         other_user = User.objects.create_user(username='otheruser', email='otheruser@test.com', password='testpassword')
         other_token = Token.objects.create(user=other_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + other_token.key)
-        response = self.client.post(self.url)
+        response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_group_not_owner(self):
@@ -48,5 +48,5 @@ class GroupAPIViewTest(TestCase):
         UserGroup.objects.create(user=self.user, group=self.group)
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.post(self.url)
+        response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
