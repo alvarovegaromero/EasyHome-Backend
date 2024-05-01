@@ -12,11 +12,11 @@ class GroupsAPIView(APIView):
     def get(self, request):
         try:
             user_groups = UserGroup.objects.filter(user=request.user)  
-            group_data = [{'group_id': user_group.group.id, 
-                            'group_name': user_group.group.name, 
-                            'group_owner': user_group.group.owner.username}
+            group_data = [{'id': user_group.group.id, 
+                            'name': user_group.group.name}
                             for user_group in user_groups
                         ]
+            
             if not group_data:
                 return Response({'message': 'No groups found for this user.'}, status=status.HTTP_200_OK)
             return Response({'groups': group_data}, status=status.HTTP_200_OK)

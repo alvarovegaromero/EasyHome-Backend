@@ -27,16 +27,7 @@ class GroupCreateAPIView(APIView):
                     owner=request.user,
                 )
 
-                group_data = {
-                    'id': group.id,
-                    'name': group.name,
-                    'description': group.description,
-                    'currency': group.currency,
-                    'creation_date': group.creation_date,
-                    'owner': group.owner.username,
-                }
-
-            return Response(group_data, status=status.HTTP_201_CREATED) 
+            return Response({'id': group.id}, status=status.HTTP_201_CREATED) 
         
         except Exception as e:
             logger.error("An error occurred during group creation: %s" % str(e))
