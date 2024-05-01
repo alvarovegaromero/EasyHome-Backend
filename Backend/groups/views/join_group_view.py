@@ -29,7 +29,7 @@ class GroupJoinAPIView(APIView):
 
             UserGroup.objects.create(user=request.user, group=group)
 
-            return Response({'success': 'You have joined the group successfully.'}, status=status.HTTP_200_OK)
+            return Response({'success': 'You have joined the group successfully.', 'id': group.id}, status=status.HTTP_200_OK)
         
         except Exception as e:
             logger.error("An error occurred during group join: %s" % str(e))
