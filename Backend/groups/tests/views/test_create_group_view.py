@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from groups.models import Group
 
 
 class GroupCreateAPIViewTest(TestCase):
@@ -16,16 +17,21 @@ class GroupCreateAPIViewTest(TestCase):
     def test_create_group_authenticated(self):
         response = self.client.post(self.url, {'name': 'Test Group', 'description': 'Test Description', 'currency': 'EUR'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['name'], 'Test Group')
-        self.assertEqual(response.data['currency'], 'EUR')
-        self.assertEqual(response.data['description'], 'Test Description')
+
+        group = Group.objects.get(name='Test Group')
+        self.assertEqual(group.name, 'Test Group')
+        self.assertEqual(group.currency, 'EUR')
+        self.assertEqual(group.description, 'Test Description')
 
     def test_create_group_authenticated_no_description(self):
         response = self.client.post(self.url, {'name': 'Test Group', 'currency': 'EUR'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['name'], 'Test Group')
-        self.assertEqual(response.data['currency'], 'EUR')
-    
+            
+        group = Group.objects.get(name='Test Group')
+        self.assertEqual(group.name, 'Test Group')
+        self.assertEqual(group.currency, 'EUR')
+        self.assertEqual(group.description, '')
+
     def test_create_group_unauthenticated(self):
         self.client.credentials()
         response = self.client.post(self.url, {'name': 'Test Group', 'description': 'Test Description', 'currency': 'EUR'}, format='json')
@@ -41,3 +47,4 @@ class GroupCreateAPIViewTest(TestCase):
         response = self.client.post(self.url, {'name': 'Test Group', 'description': 'Test Description'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'], 'Name and currency are required')
+        

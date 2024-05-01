@@ -17,7 +17,8 @@ class GroupsAPIViewTest(TestCase):
     def test_get_groups(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['groups'][0]['group_id'], self.group.id)
+        self.assertEqual(response.data['groups'][0]['id'], self.group.id)
+        self.assertEqual(response.data['groups'][0]['name'], self.group.name)
 
     def test_get_groups_no_groups(self):
         UserGroup.objects.filter(user=self.user).delete() 
