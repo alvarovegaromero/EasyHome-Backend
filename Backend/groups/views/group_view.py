@@ -33,7 +33,7 @@ class GroupAPIView(APIView):
             return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    def post(self, request, group_id):
+    def delete(self, request, group_id):
         group = get_object_or_404(Group, pk=group_id)
 
         try:
