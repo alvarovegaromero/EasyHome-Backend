@@ -14,12 +14,18 @@ class RegisterAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('token' in response.data)
         self.assertEqual(response.data['username'], 'testuser')
+
+        user = User.objects.get(username='testuser')
+        self.assertEqual(user.id, response.data['id'])
     
     def test_register_success_with_all_fields(self):
         response = self.client.post(self.url, {'username': 'testuser', 'password': 'testpassword', 'confirmPassword': 'testpassword', 'email': 'a@a.com', 'firstName': 'alv', 'lastName': 'alv'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('token' in response.data)
         self.assertEqual(response.data['username'], 'testuser')
+
+        user = User.objects.get(username='testuser')
+        self.assertEqual(user.id, response.data['id'])
 
     def test_register_missing_fields(self):
         response = self.client.post(self.url, {'username': 'testuser', 'password': 'testpassword'}, format='json')
