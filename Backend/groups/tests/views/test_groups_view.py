@@ -24,4 +24,5 @@ class GroupsAPIViewTest(TestCase):
         UserGroup.objects.filter(user=self.user).delete() 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['message'], 'No groups found for this user.')
+        self.assertEqual(response.data['groups'], [])
+        

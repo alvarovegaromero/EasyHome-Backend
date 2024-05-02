@@ -17,10 +17,9 @@ class GroupsAPIView(APIView):
                             for user_group in user_groups
                         ]
             
-            if not group_data:
-                return Response({'message': 'No groups found for this user.'}, status=status.HTTP_200_OK)
             return Response({'groups': group_data}, status=status.HTTP_200_OK)
         
         except Exception as e:
             logger.error("An error occurred during groups retrieval: %s" % str(e))
             return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
