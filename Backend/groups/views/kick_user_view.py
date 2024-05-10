@@ -31,3 +31,4 @@ class GroupKickUserAPIView(APIView):
             user_group.delete()
 
         return Response("User has been succesfully kicked from the group", status=status.HTTP_200_OK)
+    
