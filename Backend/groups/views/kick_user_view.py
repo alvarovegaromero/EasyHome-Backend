@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.db import transaction
 from venv import logger
+from django.contrib.auth.models import User
 
 
 class GroupKickUserAPIView(APIView):
@@ -17,6 +18,9 @@ class GroupKickUserAPIView(APIView):
             except Group.DoesNotExist:
                 return Response({'error': "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
+            if not User.objects.filter(id=user_id).exists():
+                return Response({'error': "User wasn't found"}, status=status.HTTP_404_NOT_FOUND)
+            
             try:
                 user_group = UserGroup.objects.get(user_id=user_id, group_id=group_id)
             except UserGroup.DoesNotExist:
@@ -34,5 +38,5 @@ class GroupKickUserAPIView(APIView):
             return Response({'success': "User has been succesfully kicked from the group"}, status=status.HTTP_200_OK)
 
         except Exception as e:
-            logger.error("An error occurred during group join: %s" % str(e))
-            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error("An error occurred during expulsion: %s" % str(e))
+            return Response({'error': "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
