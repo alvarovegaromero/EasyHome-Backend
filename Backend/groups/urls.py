@@ -15,10 +15,10 @@ urlpatterns = [
     path('', GroupsAPIView.as_view(), name='groups'),
     path('currencies', CurrenciesAPIView.as_view(), name='currencies'),
     path('create', GroupCreateAPIView.as_view(), name='create_group'),
-    path('join', GroupJoinAPIView.as_view(), name='join_group'), # maybe doesnt follow the restful api standars
+    path('join', GroupJoinAPIView.as_view(), name='join_group'), 
     path('<str:group_id>/leave', GroupLeaveAPIView.as_view(), name='leave_group'),
     path('<str:group_id>/generate_code', GroupGenerateCodeAPIView.as_view(), name='generate_code'),
-    path('<str:group_id>', GroupAPIView.as_view(), name='group'),
     path('<str:group_id>/kick/<str:user_id>', GroupKickUserAPIView.as_view(), name='kick_user'),
     path('<str:group_id>/change_owner/<str:user_id>', GroupChangeOwnerAPIView.as_view(), name='change_owner'),
+    path('<str:group_id>', GroupAPIView.as_view(), name='group'),
 ]
