@@ -16,16 +16,16 @@ class GroupKickUserAPIView(APIView):
         except Group.DoesNotExist:
             return Response("Group wasn't found", status=status.HTTP_404_NOT_FOUND)
 
-        if request.user != group.owner:
-            return Response("Only the group owner can kick users", status=status.HTTP_403_FORBIDDEN)
-
-        if request.user.id == user_id:
-            return Response("You cannot kick yourself. Leave the group instead", status=status.HTTP_400_BAD_REQUEST)
-
         try:
             user_group = UserGroup.objects.get(user_id=user_id, group_id=group_id)
         except UserGroup.DoesNotExist:
             return Response("User is not a member of this group", status=status.HTTP_404_NOT_FOUND)
+
+        if request.user != group.owner:
+            return Response("Only the group owner can kick users", status=status.HTTP_403_FORBIDDEN)
+
+        if request.user.id == user_id:
+            return Response("You can not kick yourself. Leave the group instead", status=status.HTTP_400_BAD_REQUEST)
         
         with transaction.atomic():
             user_group.delete()
