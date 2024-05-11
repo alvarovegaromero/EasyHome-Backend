@@ -27,7 +27,13 @@ class Group(models.Model):
         self.join_code_expiration = timezone.now() + timedelta(weeks=1)
         self.save()
         return self.join_code
-
+    
+    def get_users(self):
+        return [{'username': user_group.user.username, 
+                 'id': user_group.user.id, 
+                'is_owner': user_group.user == self.owner} 
+                for user_group in self.usergroup_set.all()]
+        
     def __str__(self):
         return self.name
     
