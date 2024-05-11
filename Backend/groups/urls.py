@@ -9,7 +9,7 @@ from .views.join_code_view import GroupGenerateCodeAPIView
 from .views.currencies_view import CurrenciesAPIView
 from .views.change_owner_view import GroupChangeOwnerAPIView
 from .views.kick_user_view import GroupKickUserAPIView
-
+from .views.group_users_view import GroupUsersAPIView
 
 urlpatterns = [
     path('', GroupsAPIView.as_view(), name='groups'),
@@ -20,5 +20,6 @@ urlpatterns = [
     path('<str:group_id>/generate_code', GroupGenerateCodeAPIView.as_view(), name='generate_code'),
     path('<str:group_id>/kick/<str:user_id>', GroupKickUserAPIView.as_view(), name='kick_user'),
     path('<str:group_id>/change_owner/<str:user_id>', GroupChangeOwnerAPIView.as_view(), name='change_owner'),
+    path('<str:group_id>/users', GroupUsersAPIView.as_view(), name='group'),
     path('<str:group_id>', GroupAPIView.as_view(), name='group'),
 ]
