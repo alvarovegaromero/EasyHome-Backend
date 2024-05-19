@@ -1,5 +1,4 @@
 from venv import logger
-from django.shortcuts import get_object_or_404
 from groups.models import Group, UserGroup
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -11,9 +10,12 @@ class GroupAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-
         try:
+            try:
+                group = Group.objects.get(id=group_id)
+            except Group.DoesNotExist:
+                return Response({'error': "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
+
             if not UserGroup.objects.filter(user=request.user, group=group).exists():
                 return Response({'error': 'You do not belong to this group.'}, status=status.HTTP_403_FORBIDDEN)
             
@@ -34,9 +36,12 @@ class GroupAPIView(APIView):
 
 
     def delete(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-
         try:
+            try:
+                group = Group.objects.get(id=group_id)
+            except Group.DoesNotExist:
+                return Response({'error': "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
+
             if request.user != group.owner:
                 return Response({'error': 'You do not have permission to delete this group.'}, status=status.HTTP_403_FORBIDDEN)
 

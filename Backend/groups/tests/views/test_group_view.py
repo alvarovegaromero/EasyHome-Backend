@@ -24,6 +24,11 @@ class GroupAPIViewTest(TestCase):
         self.assertEqual(response.data['currency'], 'EUR')
         self.assertEqual(response.data['owner'], self.owner.username)
 
+    def test_get_nonexistent_group(self):
+        response = self.client.get(f'/api/groups/9999')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], "Group wasn't found")
+
     def test_get_group_not_member(self):
         other_user = User.objects.create_user(username='otheruser', email='otheruser@test.com', password='testpassword')
         other_token = Token.objects.create(user=other_user)
@@ -35,6 +40,11 @@ class GroupAPIViewTest(TestCase):
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['success'], 'Group deleted successfully')
+
+    def test_delete_nonexistent_group(self):
+        response = self.client.delete(f'/api/groups/9999')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], "Group wasn't found")
 
     def test_delete_group_not_owner_not_member(self):
         other_user = User.objects.create_user(username='otheruser', email='otheruser@test.com', password='testpassword')
