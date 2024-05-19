@@ -26,7 +26,7 @@ class SharedBoardView(APIView):
                 
             board = SharedBoard.objects.get(group=group)
             request.session['last_edited'] = str(board.last_edited)
-            return ({'content': board.content})
+            return Response({'data': board.content}, status=status.HTTP_200_OK)
 
         except Exception as e:
             logger.error("An error occurred during shared board retrieval: %s" % str(e))
