@@ -5,7 +5,7 @@ import secrets
 import string
 from django.utils import timezone
 from datetime import timedelta
-
+from shared_board.models import SharedBoard
 
 class Group(models.Model):
     name = models.CharField(max_length=35)
@@ -46,6 +46,7 @@ class Group(models.Model):
 
         if is_new:
             UserGroup.objects.create(user=self.owner, group=self)
+            SharedBoard.objects.create(group=self)
 
 class UserGroup(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
