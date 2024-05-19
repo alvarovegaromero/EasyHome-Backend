@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-class SharedBoard(APIView):
+class SharedBoardView(APIView):
     permission_classes = (IsAuthenticated,) 
 
     def post(self, request):
