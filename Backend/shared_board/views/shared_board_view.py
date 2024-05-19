@@ -25,7 +25,7 @@ class SharedBoardView(APIView):
 
             board = SharedBoard.objects.get(group=group)
 
-            last_edited = request.session.get('last_edited')
+            last_edited = request.session.get('last_edited') #get request has to be done before
             if last_edited is not None and str(board.last_edited) != last_edited:
                 return Response({'error': 'The board has been edited by another user.'}, status=status.HTTP_409_CONFLICT)
 
