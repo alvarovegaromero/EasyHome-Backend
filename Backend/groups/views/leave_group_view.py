@@ -3,17 +3,24 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.shortcuts import get_object_or_404
 from groups.models import Group, UserGroup
+
 
 class GroupLeaveAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-        user_group = get_object_or_404(UserGroup, user=request.user, group=group)
-
         try: 
+            try:
+                group = Group.objects.get(id=group_id)
+            except Group.DoesNotExist:
+                return Response({'error': "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
+
+            try:
+                user_group = UserGroup.objects.get(user=request.user, group=group)
+            except UserGroup.DoesNotExist:
+                return Response({'error': 'You do not belong to this group.'}, status=status.HTTP_403_FORBIDDEN)
+
             if group.owner == request.user:
                 # If the user is the owner of the group, transfer ownership to the next user
                 next_owner_user_group = UserGroup.objects.filter(group=group).exclude(user=request.user).order_by('join_date').first()

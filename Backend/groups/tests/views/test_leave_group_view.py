@@ -23,12 +23,18 @@ class GroupLeaveAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['success'], 'You have left the group successfully.')
 
+    def test_leave_nonexistent_group(self):
+        response = self.client.post(f'/api/groups/9999/leave')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], "Group wasn't found")
+
     def test_leave_group_not_member(self):
         other_user = User.objects.create_user(username='otheruser', email='otheruser@test.com', password='testpassword')
         other_token = Token.objects.create(user=other_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + other_token.key)
         response = self.client.post(self.url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['error'], 'You do not belong to this group.')
 
     def test_leave_group_transfer_ownership(self):
         owner_token = Token.objects.create(user=self.owner)
