@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users',
     'groups',
+    'shared_board',
 ]
 
 REST_FRAMEWORK = {
