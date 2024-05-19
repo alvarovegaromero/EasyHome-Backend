@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import Group
+from groups.models import Group
 
 class SharedBoard(models.Model):
     group = models.OneToOneField(Group, on_delete=models.CASCADE)
