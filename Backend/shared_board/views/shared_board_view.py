@@ -9,7 +9,7 @@ from shared_board.models import SharedBoard
 class SharedBoardView(APIView):
     permission_classes = (IsAuthenticated,) 
 
-    def post(self, request, group_id):
+    def put(self, request, group_id):
         try:
             try:
                 group = Group.objects.get(id=group_id)
