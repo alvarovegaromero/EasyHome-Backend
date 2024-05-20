@@ -17,9 +17,9 @@ class GroupJoinAPIView(APIView):
             return Response({'error': 'Join code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Get the group with the provided join code that has not expired
-            groups = Group.objects.filter(join_code=join_code, join_code_expiration__gt=timezone.now())
-            group = groups.order_by('-join_code_expiration').first()
+            # group that have the provided join code and have not expired (join_code_expiration later) - only one.
+            # maybe can be a function in the Group model
+            group = Group.objects.filter(join_code=join_code, join_code_expiration__gt=timezone.now()).first() 
 
             if group is None:
                 return Response({'error': 'Invalid or expired join code'}, status=status.HTTP_400_BAD_REQUEST)
