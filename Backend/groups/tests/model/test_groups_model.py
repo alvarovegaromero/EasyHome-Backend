@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from groups.models import Group, UserGroup
 import string
 from django.utils import timezone
+from shared_board.models import SharedBoard
+
 
 class GroupModelTest(TestCase):
     def setUp(self):
@@ -33,3 +35,19 @@ class GroupModelTest(TestCase):
             elif user['username'] == self.user2.username:
                 self.assertEqual(user['id'], self.user2.id)
                 self.assertFalse(user['is_owner'])
+
+    def test_group_creation_creates_sharedboard_and_usergroup(self):
+        shared_board = SharedBoard.objects.filter(group=self.group)
+        user_owner_group = UserGroup.objects.filter(group=self.group, user=self.user1)
+
+        self.assertEqual(shared_board.exists(), True)
+        self.assertEqual(user_owner_group.exists(), True)
+
+    def test_group_delete_deletes_sharedboard_and_usergroup(self):
+        group_id = self.group.id
+        self.group.delete()
+        shared_board = SharedBoard.objects.filter(group_id=group_id)
+        user_owner_group = UserGroup.objects.filter(group_id=group_id, user=self.user1)
+
+        self.assertEqual(shared_board.exists(), False)
+        self.assertEqual(user_owner_group.exists(), False)
