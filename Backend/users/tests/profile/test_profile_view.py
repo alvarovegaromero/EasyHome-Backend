@@ -36,7 +36,8 @@ class ProfileAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["success"], "Profile updated successfully")
+        self.assertEqual(response.data["success"],
+                         "Profile updated successfully")
 
     def test_post_profile_not_authenticated(self):
         self.client.credentials()
@@ -56,7 +57,8 @@ class ProfileAPIViewTest(TestCase):
         self.assertEqual(response.data["error"], "Username is required")
 
     def test_post_profile_no_email(self):
-        response = self.client.post(self.url, {"username": "newuser"}, format="json")
+        response = self.client.post(
+            self.url, {"username": "newuser"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "Email is required")
 
@@ -103,7 +105,8 @@ class ProfileAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["success"], "Profile updated successfully")
+        self.assertEqual(response.data["success"],
+                         "Profile updated successfully")
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, "newuser")
         self.assertEqual(self.user.email, "newuser@test.com")

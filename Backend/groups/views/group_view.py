@@ -37,7 +37,8 @@ class GroupAPIView(APIView):
             return Response(group_data, status=status.HTTP_200_OK)
 
         except Exception as e:
-            logger.error("An error occurred during group retrieval: %s" % str(e))
+            logger.error(
+                "An error occurred during group retrieval: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -65,7 +66,8 @@ class GroupAPIView(APIView):
             )
 
         except Exception as e:
-            logger.error("An error occurred during group deletion: %s" % str(e))
+            logger.error(
+                "An error occurred during group deletion: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

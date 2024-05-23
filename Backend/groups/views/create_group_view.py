@@ -36,7 +36,8 @@ class GroupCreateAPIView(APIView):
             return Response({"id": group.id}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            logger.error("An error occurred during group creation: %s" % str(e))
+            logger.error(
+                "An error occurred during group creation: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

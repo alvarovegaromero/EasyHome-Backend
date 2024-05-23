@@ -38,7 +38,8 @@ class ResetPasswordAPIView(APIView):
                 + "EasyHome Team"
             )
 
-            send_mail(subject, message, from_email, to_email, fail_silently=False)
+            send_mail(subject, message, from_email,
+                      to_email, fail_silently=False)
             return Response(
                 {"success": "Email sent succesfully"}, status=status.HTTP_200_OK
             )

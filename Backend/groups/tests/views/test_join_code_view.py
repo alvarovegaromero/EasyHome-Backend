@@ -40,4 +40,5 @@ class GroupGenerateCodeAPIViewTest(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data["error"], "You are not a member of this group.")
+        self.assertEqual(response.data["error"],
+                         "You are not a member of this group.")

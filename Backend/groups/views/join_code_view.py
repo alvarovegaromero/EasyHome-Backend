@@ -35,7 +35,8 @@ class GroupGenerateCodeAPIView(APIView):
 
         except Exception as e:
             logger.error(
-                "An error occurred during group join code generation: %s" % str(e)
+                "An error occurred during group join code generation: %s" % str(
+                    e)
             )
             return Response(
                 {"error": "Internal Server Error"},

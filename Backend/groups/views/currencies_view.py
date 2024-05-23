@@ -11,7 +11,8 @@ class CurrenciesAPIView(APIView):
         try:
             return Response(CURRENCY_CHOICES)
         except Exception as e:
-            logger.error("An error occurred during currencies retrieval: %s" % str(e))
+            logger.error(
+                "An error occurred during currencies retrieval: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

@@ -27,7 +27,8 @@ class GroupKickUserAPIView(APIView):
                 )
 
             try:
-                user_group = UserGroup.objects.get(user_id=user_id, group_id=group_id)
+                user_group = UserGroup.objects.get(
+                    user_id=user_id, group_id=group_id)
             except UserGroup.DoesNotExist:
                 return Response(
                     {"error": "User is not a member of this group"},

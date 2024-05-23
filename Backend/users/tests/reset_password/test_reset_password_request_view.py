@@ -34,7 +34,8 @@ class ResetPasswordRequestAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["success"], "Password reset successfully")
+        self.assertEqual(response.data["success"],
+                         "Password reset successfully")
 
     def test_post_reset_password_non_matching_passwords(self):
         response = self.client.post(

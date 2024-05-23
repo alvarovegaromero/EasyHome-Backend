@@ -20,7 +20,8 @@ class GroupLeaveAPIView(APIView):
                 )
 
             try:
-                user_group = UserGroup.objects.get(user=request.user, group=group)
+                user_group = UserGroup.objects.get(
+                    user=request.user, group=group)
             except UserGroup.DoesNotExist:
                 return Response(
                     {"error": "You do not belong to this group."},

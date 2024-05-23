@@ -26,7 +26,8 @@ class ProfileAPIView(APIView):
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
         except Exception as e:
-            logger.error("An error occurred during profile retrieval: %s" % str(e))
+            logger.error(
+                "An error occurred during profile retrieval: %s" % str(e))
             return Response(
                 "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -94,7 +95,8 @@ class ProfileAPIView(APIView):
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
         except Exception as e:
-            logger.error("An error occurred during profile update: %s" % str(e))
+            logger.error(
+                "An error occurred during profile update: %s" % str(e))
             return Response(
                 "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

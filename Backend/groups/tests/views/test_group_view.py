@@ -48,7 +48,8 @@ class GroupAPIViewTest(TestCase):
     def test_delete_group_owner(self):
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["success"], "Group deleted successfully")
+        self.assertEqual(response.data["success"],
+                         "Group deleted successfully")
 
     def test_delete_nonexistent_group(self):
         response = self.client.delete(f"/api/groups/9999")

@@ -28,17 +28,21 @@ class LoginAPIViewTest(TestCase):
             self.url, {"password": "testpassword"}, format="json"
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data["error"], "Username and password are required")
+        self.assertEqual(response.data["error"],
+                         "Username and password are required")
 
     def test_login_no_password(self):
-        response = self.client.post(self.url, {"username": "testuser"}, format="json")
+        response = self.client.post(
+            self.url, {"username": "testuser"}, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data["error"], "Username and password are required")
+        self.assertEqual(response.data["error"],
+                         "Username and password are required")
 
     def test_login_no_username_no_password(self):
         response = self.client.post(self.url, {}, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data["error"], "Username and password are required")
+        self.assertEqual(response.data["error"],
+                         "Username and password are required")
 
     def test_login_wrong_password(self):
         response = self.client.post(
