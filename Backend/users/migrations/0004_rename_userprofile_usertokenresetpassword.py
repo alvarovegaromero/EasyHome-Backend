@@ -7,13 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_remove_userprofile_token_expiration'),
+        ("users", "0003_remove_userprofile_token_expiration"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='UserProfile',
-            new_name='UserTokenResetPassword',
+            old_name="UserProfile",
+            new_name="UserTokenResetPassword",
         ),
     ]

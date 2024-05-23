@@ -13,5 +13,7 @@ class CurrenciesAPIView(APIView):
             logger.error(
                 "An error occurred during currencies retrieval: %s" %
                 str(e))
-            return Response({'error': "Internal Server Error"},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

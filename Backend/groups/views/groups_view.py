@@ -12,16 +12,18 @@ class GroupsAPIView(APIView):
     def get(self, request):
         try:
             user_groups = UserGroup.objects.filter(user=request.user)
-            group_data = [{'id': user_group.group.id,
-                           'name': user_group.group.name}
-                          for user_group in user_groups
-                          ]
+            group_data = [
+                {"id": user_group.group.id, "name": user_group.group.name}
+                for user_group in user_groups
+            ]
 
-            return Response({'groups': group_data}, status=status.HTTP_200_OK)
+            return Response({"groups": group_data}, status=status.HTTP_200_OK)
 
         except Exception as e:
             logger.error(
                 "An error occurred during groups retrieval: %s" %
                 str(e))
-            return Response({'error': "Internal Server Error"},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

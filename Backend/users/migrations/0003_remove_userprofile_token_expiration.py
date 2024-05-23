@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_userprofile_token_expiration'),
+        ("users", "0002_userprofile_token_expiration"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='userprofile',
-            name='token_expiration',
+            model_name="userprofile",
+            name="token_expiration",
         ),
     ]

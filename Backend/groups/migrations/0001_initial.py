@@ -15,77 +15,78 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Group',
+            name="Group",
             fields=[
-                ('id',
-                 models.BigAutoField(
-                     auto_created=True,
-                     primary_key=True,
-                     serialize=False,
-                     verbose_name='ID')),
-                ('name',
-                 models.CharField(
-                     max_length=35)),
-                ('description',
-                 models.TextField()),
-                ('currency',
-                 models.CharField(
-                     choices=[
-                         ('USD',
-                          'American Dollar'),
-                         ('EUR',
-                          'Euro'),
-                         ('JPY',
-                          'Japanese Yen'),
-                         ('GBP',
-                          'British Pound'),
-                         ('CNY',
-                          'Chinese Yuan'),
-                         ('CAD',
-                          'Canadian Dollar'),
-                         ('AUD',
-                          'Australian Dollar'),
-                         ('XXX',
-                          'Other')],
-                     max_length=3)),
-                ('creation_date',
-                 models.DateField(
-                     auto_now_add=True)),
-                ('owner',
-                 models.ForeignKey(
-                     on_delete=django.db.models.deletion.CASCADE,
-                     related_name='owned_groups',
-                     to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=35)),
+                ("description", models.TextField()),
+                (
+                    "currency",
+                    models.CharField(
+                        choices=[
+                            ("USD", "American Dollar"),
+                            ("EUR", "Euro"),
+                            ("JPY", "Japanese Yen"),
+                            ("GBP", "British Pound"),
+                            ("CNY", "Chinese Yuan"),
+                            ("CAD", "Canadian Dollar"),
+                            ("AUD", "Australian Dollar"),
+                            ("XXX", "Other"),
+                        ],
+                        max_length=3,
+                    ),
+                ),
+                ("creation_date", models.DateField(auto_now_add=True)),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="owned_groups",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='UserGroup',
+            name="UserGroup",
             fields=[
-                ('id',
-                 models.BigAutoField(
-                     auto_created=True,
-                     primary_key=True,
-                     serialize=False,
-                     verbose_name='ID')),
-                ('join_date',
-                 models.DateField(
-                     auto_now_add=True)),
-                ('group',
-                 models.ForeignKey(
-                     on_delete=django.db.models.deletion.CASCADE,
-                     to='groups.group')),
-                ('user',
-                 models.ForeignKey(
-                     on_delete=django.db.models.deletion.CASCADE,
-                     to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("join_date", models.DateField(auto_now_add=True)),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="groups.group"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
-            model_name='usergroup',
+            model_name="usergroup",
             constraint=models.UniqueConstraint(
-                fields=(
-                    'user',
-                    'group'),
-                name='unique_usergroup'),
+                fields=("user", "group"), name="unique_usergroup"
+            ),
         ),
     ]

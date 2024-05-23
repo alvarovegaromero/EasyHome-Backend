@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('groups', '0002_alter_group_description'),
+        ("groups", "0002_alter_group_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='group',
-            name='join_code',
+            model_name="group",
+            name="join_code",
             field=models.CharField(
                 blank=True,
                 max_length=30,
@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
                 unique=True),
         ),
         migrations.AddField(
-            model_name='group',
-            name='join_code_expiration',
+            model_name="group",
+            name="join_code_expiration",
             field=models.DateTimeField(
                 blank=True,
                 null=True),

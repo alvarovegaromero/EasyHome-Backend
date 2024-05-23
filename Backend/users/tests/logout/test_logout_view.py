@@ -9,19 +9,19 @@ class LogoutAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username='testuser',
-            email='testuser@test.com',
-            password='testpassword')
+            username="testuser",
+            email="testuser@test.com",
+            password="testpassword")
         self.token = Token.objects.create(user=self.user)
-        self.url = '/api/users/logout'
+        self.url = "/api/users/logout"
 
     def test_logout_success(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['success'], 'Logout successful')
+        self.assertEqual(response.data["success"], "Logout successful")
 
     def test_logout_not_authenticated(self):
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(response.data['error'], 'User is not authenticated')
+        self.assertEqual(response.data["error"], "User is not authenticated")

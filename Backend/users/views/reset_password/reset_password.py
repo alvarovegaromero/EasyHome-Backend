@@ -1,4 +1,3 @@
-
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -17,7 +16,7 @@ def generate_reset_url(user):
 
     associate_user_with_token(user, token)
 
-    reset_url = reverse('reset-password-form') + f'?token={token}'
+    reset_url = reverse("reset-password-form") + f"?token={token}"
     return reset_url
 
 
@@ -50,12 +49,8 @@ def reset_password_with_token(token, new_password):
             user.save()
             return True, "Password changed successfully."
         else:
-            return False, (
-                "Invalid token. "
-                "The token is not valid for resetting the password."
-            )
-    except (UserTokenResetPassword.DoesNotExist, TypeError,
-            ValueError, OverflowError):
+            return False, ("Invalid token. "
+                           "The token is not valid for resetting the password.")
+    except (UserTokenResetPassword.DoesNotExist, TypeError, ValueError, OverflowError):
         return False, ("Invalid token."
-                       "The token provided does not exist or is malformed."
-                       )
+                       "The token provided does not exist or is malformed.")

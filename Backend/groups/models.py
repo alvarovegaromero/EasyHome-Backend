@@ -14,9 +14,8 @@ class Group(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)
     creation_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='owned_groups')  # accesible using user.owned_groups
+        User, on_delete=models.CASCADE, related_name="owned_groups"
+    )  # accesible using user.owned_groups
     join_code = models.CharField(
         max_length=30,
         unique=True,
@@ -27,12 +26,12 @@ class Group(models.Model):
     def generate_join_code(self):
         alphabet = string.ascii_letters + string.digits  # generate letters and digits
         while True:
-            join_code = ''.join(secrets.choice(alphabet) for i in range(30))
+            join_code = "".join(secrets.choice(alphabet) for i in range(30))
             # Check if the generated code already exists and if it has expired.
             # If no, break the loop
             if not Group.objects.filter(
-                    join_code=join_code,
-                    join_code_expiration__gt=timezone.now()).exists():
+                join_code=join_code, join_code_expiration__gt=timezone.now()
+            ).exists():
                 self.join_code = join_code
                 break
         self.join_code_expiration = timezone.now() + timedelta(weeks=1)
@@ -40,10 +39,14 @@ class Group(models.Model):
         return self.join_code
 
     def get_users(self):
-        return [{'username': user_group.user.username,
-                 'id': user_group.user.id,
-                 'is_owner': user_group.user == self.owner}
-                for user_group in self.usergroup_set.all()]
+        return [
+            {
+                "username": user_group.user.username,
+                "id": user_group.user.id,
+                "is_owner": user_group.user == self.owner,
+            }
+            for user_group in self.usergroup_set.all()
+        ]
 
     def __str__(self):
         return self.name
@@ -69,10 +72,8 @@ class UserGroup(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=[
-                    'user',
-                    'group'],
-                name='unique_usergroup')  # Unique user-group pair
+                fields=["user", "group"], name="unique_usergroup"
+            )  # Unique user-group pair
         ]
 
     def __str__(self):

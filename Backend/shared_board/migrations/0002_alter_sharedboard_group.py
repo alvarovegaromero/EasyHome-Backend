@@ -7,16 +7,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('groups', '0003_group_join_code_group_join_code_expiration'),
-        ('shared_board', '0001_initial'),
+        ("groups", "0003_group_join_code_group_join_code_expiration"),
+        ("shared_board", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='sharedboard',
-            name='group',
+            model_name="sharedboard",
+            name="group",
             field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='groups.group'),
+                on_delete=django.db.models.deletion.CASCADE, to="groups.group"
+            ),
         ),
     ]
