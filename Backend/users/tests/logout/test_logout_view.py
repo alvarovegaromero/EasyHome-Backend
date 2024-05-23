@@ -8,7 +8,10 @@ from rest_framework.authtoken.models import Token
 class LogoutAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpassword')
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='testuser@test.com',
+            password='testpassword')
         self.token = Token.objects.create(user=self.user)
         self.url = '/api/users/logout'
 

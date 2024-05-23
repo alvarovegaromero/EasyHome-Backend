@@ -12,13 +12,15 @@ class GroupCreateAPIView(APIView):
 
     def post(self, request):
         name = request.data.get('name')
-        description = request.data.get('description', '') #empty string if not provided
+        description = request.data.get(
+            'description', '')  # empty string if not provided
         currency = request.data.get('currency')
 
         if not name or not currency:
-            return Response({'error': 'Name and currency are required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Name and currency are required'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        try:        
+        try:
             with transaction.atomic():
                 group = Group.objects.create(
                     name=name,
@@ -27,9 +29,11 @@ class GroupCreateAPIView(APIView):
                     owner=request.user,
                 )
 
-            return Response({'id': group.id}, status=status.HTTP_201_CREATED) 
-        
+            return Response({'id': group.id}, status=status.HTTP_201_CREATED)
+
         except Exception as e:
-            logger.error("An error occurred during group creation: %s" % str(e))
-            return Response({'error': "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+            logger.error(
+                "An error occurred during group creation: %s" %
+                str(e))
+            return Response({'error': "Internal Server Error"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)

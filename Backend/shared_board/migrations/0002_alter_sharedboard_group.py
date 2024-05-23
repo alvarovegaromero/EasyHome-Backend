@@ -15,6 +15,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='sharedboard',
             name='group',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='groups.group'),
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                to='groups.group'),
         ),
     ]

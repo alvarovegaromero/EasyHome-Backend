@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from groups.currency_choices import CURRENCY_CHOICES
 from rest_framework import status
 
+
 class CurrenciesAPIViewTest(TestCase):
     def setUp(self):
         self.client = Client()

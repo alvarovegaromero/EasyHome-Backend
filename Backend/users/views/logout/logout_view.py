@@ -9,12 +9,16 @@ class LogoutAPIView(APIView):
     def post(self, request):
         try:
             if request.user.is_authenticated:
-                # Delete the token when the user logout - Safer but costly. 
-                # request.user.auth_token.delete() 
+                # Delete the token when the user logout - Safer but costly.
+                # request.user.auth_token.delete()
                 logout(request)
-                return Response({'success': 'Logout successful'}, status=status.HTTP_200_OK)
+                return Response({'success': 'Logout successful'},
+                                status=status.HTTP_200_OK)
             else:
-                return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'error': 'User is not authenticated'},
+                                status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger.error("An error occurred during log out: %s" % str(e))
-            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                "Internal Server Error",
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
