@@ -1,10 +1,11 @@
-from rest_framework import status
-from rest_framework.views import APIView
 from venv import logger
-from rest_framework.response import Response
+
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
+from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class RegisterAPIView(APIView):

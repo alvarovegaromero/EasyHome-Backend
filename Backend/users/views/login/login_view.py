@@ -1,9 +1,10 @@
-from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
+from venv import logger
+
 from django.contrib.auth import authenticate
 from rest_framework import status
-from venv import logger
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class LoginAPIView(APIView):

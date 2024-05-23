@@ -1,9 +1,10 @@
 from venv import logger
-from rest_framework.views import APIView
-from rest_framework.response import Response
+
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from groups.models import Group, UserGroup
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from shared_board.models import SharedBoard
 
 

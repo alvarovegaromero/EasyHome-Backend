@@ -1,10 +1,11 @@
 from venv import logger
-from rest_framework.views import APIView
+
+from django.utils import timezone
+from groups.models import Group, UserGroup
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from groups.models import Group, UserGroup
-from django.utils import timezone
+from rest_framework.views import APIView
 
 
 class GroupJoinAPIView(APIView):

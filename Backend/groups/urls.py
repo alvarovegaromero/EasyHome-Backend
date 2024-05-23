@@ -1,15 +1,15 @@
 from django.urls import path
 
-from .views.groups_view import GroupsAPIView
-from .views.create_group_view import GroupCreateAPIView
-from .views.group_view import GroupAPIView
-from .views.leave_group_view import GroupLeaveAPIView
-from .views.join_group_view import GroupJoinAPIView
-from .views.join_code_view import GroupGenerateCodeAPIView
-from .views.currencies_view import CurrenciesAPIView
 from .views.change_owner_view import GroupChangeOwnerAPIView
-from .views.kick_user_view import GroupKickUserAPIView
+from .views.create_group_view import GroupCreateAPIView
+from .views.currencies_view import CurrenciesAPIView
 from .views.group_users_view import GroupUsersAPIView
+from .views.group_view import GroupAPIView
+from .views.groups_view import GroupsAPIView
+from .views.join_code_view import GroupGenerateCodeAPIView
+from .views.join_group_view import GroupJoinAPIView
+from .views.kick_user_view import GroupKickUserAPIView
+from .views.leave_group_view import GroupLeaveAPIView
 
 urlpatterns = [
     path("", GroupsAPIView.as_view(), name="groups"),

@@ -1,8 +1,9 @@
 from venv import logger
-from rest_framework.views import APIView
-from rest_framework.response import Response
+
 from groups.currency_choices import CURRENCY_CHOICES
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class CurrenciesAPIView(APIView):

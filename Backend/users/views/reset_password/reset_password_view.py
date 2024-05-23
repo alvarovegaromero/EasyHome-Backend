@@ -1,9 +1,12 @@
-from rest_framework import status
 from venv import logger
+
 from django.core.mail import send_mail
-from Backend.settings import BASE_URL
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from Backend.settings import BASE_URL
+
 from .reset_password import generate_reset_url, get_user_by_email
 
 

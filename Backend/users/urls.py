@@ -1,13 +1,13 @@
+from django.shortcuts import render
 from django.urls import path
+
 from .views.login.login_view import LoginAPIView
 from .views.logout.logout_view import LogoutAPIView
 from .views.profile.profile_view import ProfileAPIView
 from .views.register.register_view import RegisterAPIView
+from .views.reset_password.reset_password_request_view import \
+    ResetPasswordRequestAPIView
 from .views.reset_password.reset_password_view import ResetPasswordAPIView
-from .views.reset_password.reset_password_request_view import (
-    ResetPasswordRequestAPIView,
-)
-from django.shortcuts import render
 
 
 # didn't know where to place. maybe inside a view?

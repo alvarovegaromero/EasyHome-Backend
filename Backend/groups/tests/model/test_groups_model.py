@@ -1,8 +1,9 @@
-from django.test import TestCase
-from django.contrib.auth.models import User
-from groups.models import Group, UserGroup
 import string
+
+from django.contrib.auth.models import User
+from django.test import TestCase
 from django.utils import timezone
+from groups.models import Group, UserGroup
 from shared_board.models import SharedBoard
 
 
