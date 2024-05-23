@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
+
 from users.models import UserTokenResetPassword
 
 token_generator = PasswordResetTokenGenerator()
