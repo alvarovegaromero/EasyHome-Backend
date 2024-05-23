@@ -18,11 +18,7 @@ class Group(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="owned_groups"
     )  # accesible using user.owned_groups
-    join_code = models.CharField(
-        max_length=30,
-        unique=True,
-        null=True,
-        blank=True)
+    join_code = models.CharField(max_length=30, unique=True, null=True, blank=True)
     join_code_expiration = models.DateTimeField(null=True, blank=True)
 
     def generate_join_code(self):

@@ -17,16 +17,17 @@ class GroupKickUserAPIView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response({"error": "Group wasn't found"},
-                                status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
+                )
 
             if not User.objects.filter(id=user_id).exists():
-                return Response({"error": "User wasn't found"},
-                                status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "User wasn't found"}, status=status.HTTP_404_NOT_FOUND
+                )
 
             try:
-                user_group = UserGroup.objects.get(
-                    user_id=user_id, group_id=group_id)
+                user_group = UserGroup.objects.get(user_id=user_id, group_id=group_id)
             except UserGroup.DoesNotExist:
                 return Response(
                     {"error": "User is not a member of this group"},

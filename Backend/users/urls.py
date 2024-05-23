@@ -5,8 +5,9 @@ from .views.login.login_view import LoginAPIView
 from .views.logout.logout_view import LogoutAPIView
 from .views.profile.profile_view import ProfileAPIView
 from .views.register.register_view import RegisterAPIView
-from .views.reset_password.reset_password_request_view import \
-    ResetPasswordRequestAPIView
+from .views.reset_password.reset_password_request_view import (
+    ResetPasswordRequestAPIView,
+)
 from .views.reset_password.reset_password_view import ResetPasswordAPIView
 
 
@@ -20,10 +21,7 @@ urlpatterns = [
     path("logout", LogoutAPIView.as_view(), name="logout"),
     path("register", RegisterAPIView.as_view(), name="register"),
     path("profile", ProfileAPIView.as_view(), name="profile"),
-    path(
-        "reset-password",
-        ResetPasswordAPIView.as_view(),
-        name="reset-password"),
+    path("reset-password", ResetPasswordAPIView.as_view(), name="reset-password"),
     path(
         "reset-password-form/", render_reset_password_page, name="reset-password-form"
     ),

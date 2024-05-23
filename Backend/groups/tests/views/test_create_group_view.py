@@ -10,9 +10,8 @@ class GroupCreateAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.token = Token.objects.create(user=self.user)
         self.url = "/api/groups/create"
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
@@ -58,8 +57,8 @@ class GroupCreateAPIViewTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(
-            response.data["detail"],
-            "Authentication credentials were not provided.")
+            response.data["detail"], "Authentication credentials were not provided."
+        )
 
     def test_create_group_no_name(self):
         response = self.client.post(
@@ -68,9 +67,7 @@ class GroupCreateAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data["error"],
-            "Name and currency are required")
+        self.assertEqual(response.data["error"], "Name and currency are required")
 
     def test_create_group_no_currency(self):
         response = self.client.post(
@@ -79,6 +76,4 @@ class GroupCreateAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data["error"],
-            "Name and currency are required")
+        self.assertEqual(response.data["error"], "Name and currency are required")

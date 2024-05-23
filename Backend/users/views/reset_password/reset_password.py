@@ -39,8 +39,7 @@ def get_user_by_email(email):
 
 def reset_password_with_token(token, new_password):
     try:
-        user_profile = UserTokenResetPassword.objects.get(
-            reset_password_token=token)
+        user_profile = UserTokenResetPassword.objects.get(reset_password_token=token)
         user = user_profile.user
 
         if token_generator.check_token(user, token):
@@ -48,8 +47,10 @@ def reset_password_with_token(token, new_password):
             user.save()
             return True, "Password changed successfully."
         else:
-            return False, ("Invalid token. "
-                           "The token is not valid for resetting the password.")
+            return False, (
+                "Invalid token. " "The token is not valid for resetting the password."
+            )
     except (UserTokenResetPassword.DoesNotExist, TypeError, ValueError, OverflowError):
-        return False, ("Invalid token."
-                       "The token provided does not exist or is malformed.")
+        return False, (
+            "Invalid token." "The token provided does not exist or is malformed."
+        )

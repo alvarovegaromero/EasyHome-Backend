@@ -10,9 +10,8 @@ class GroupsAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         self.group = Group.objects.create(

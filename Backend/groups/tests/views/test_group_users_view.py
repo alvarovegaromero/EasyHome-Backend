@@ -10,13 +10,11 @@ class GroupUsersAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user1 = User.objects.create_user(
-            username="testuser1",
-            email="testuser1@test.com",
-            password="testpassword1")
+            username="testuser1", email="testuser1@test.com", password="testpassword1"
+        )
         self.user2 = User.objects.create_user(
-            username="testuser2",
-            email="testuser2@test.com",
-            password="testpassword2")
+            username="testuser2", email="testuser2@test.com", password="testpassword2"
+        )
         self.token = Token.objects.create(user=self.user1)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         self.group = Group.objects.create(
@@ -33,14 +31,10 @@ class GroupUsersAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["users"]), 2)
         self.assertEqual(response.data["users"][0]["id"], self.user1.id)
-        self.assertEqual(
-            response.data["users"][0]["username"],
-            self.user1.username)
+        self.assertEqual(response.data["users"][0]["username"], self.user1.username)
         self.assertEqual(response.data["users"][0]["is_owner"], True)
         self.assertEqual(response.data["users"][1]["id"], self.user2.id)
-        self.assertEqual(
-            response.data["users"][1]["username"],
-            self.user2.username)
+        self.assertEqual(response.data["users"][1]["username"], self.user2.username)
         self.assertEqual(response.data["users"][1]["is_owner"], False)
 
     def test_group_does_not_exist(self):
@@ -57,6 +51,4 @@ class GroupUsersAPIViewTest(TestCase):
         )
         response = self.client.get(f"/api/groups/{group2.id}/users")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            response.data["error"],
-            "You are not a member of this group")
+        self.assertEqual(response.data["error"], "You are not a member of this group")

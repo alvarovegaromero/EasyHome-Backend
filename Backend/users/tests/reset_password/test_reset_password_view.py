@@ -10,9 +10,8 @@ class ResetPasswordAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.url = "/api/users/reset-password"
 
     # Mocking the send_mail function

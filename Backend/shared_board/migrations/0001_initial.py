@@ -16,25 +16,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="SharedBoard",
             fields=[
-                ("id",
-                 models.BigAutoField(
-                     auto_created=True,
-                     primary_key=True,
-                     serialize=False,
-                     verbose_name="ID",
-                 ),
-                 ),
-                ("content",
-                 models.TextField(
-                     blank=True)),
-                ("last_edited",
-                 models.DateTimeField(
-                     auto_now=True)),
-                ("group",
-                 models.OneToOneField(
-                     on_delete=django.db.models.deletion.CASCADE,
-                     to="auth.group"),
-                 ),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.TextField(blank=True)),
+                ("last_edited", models.DateTimeField(auto_now=True)),
+                (
+                    "group",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE, to="auth.group"
+                    ),
+                ),
             ],
         ),
     ]

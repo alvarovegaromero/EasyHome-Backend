@@ -8,9 +8,8 @@ class LoginAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.url = "/api/users/login"
 
     def test_login_success(self):
@@ -29,24 +28,17 @@ class LoginAPIViewTest(TestCase):
             self.url, {"password": "testpassword"}, format="json"
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.data["error"],
-            "Username and password are required")
+        self.assertEqual(response.data["error"], "Username and password are required")
 
     def test_login_no_password(self):
-        response = self.client.post(
-            self.url, {"username": "testuser"}, format="json")
+        response = self.client.post(self.url, {"username": "testuser"}, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.data["error"],
-            "Username and password are required")
+        self.assertEqual(response.data["error"], "Username and password are required")
 
     def test_login_no_username_no_password(self):
         response = self.client.post(self.url, {}, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.data["error"],
-            "Username and password are required")
+        self.assertEqual(response.data["error"], "Username and password are required")
 
     def test_login_wrong_password(self):
         response = self.client.post(
@@ -56,8 +48,8 @@ class LoginAPIViewTest(TestCase):
         )
         self.assertEqual(response.status_code, 401)
         self.assertEqual(
-            response.data["error"],
-            "Incorrect username or password. Please, try again")
+            response.data["error"], "Incorrect username or password. Please, try again"
+        )
 
     def test_login_non_existent_user(self):
         response = self.client.post(
@@ -67,5 +59,5 @@ class LoginAPIViewTest(TestCase):
         )
         self.assertEqual(response.status_code, 401)
         self.assertEqual(
-            response.data["error"],
-            "Incorrect username or password. Please, try again")
+            response.data["error"], "Incorrect username or password. Please, try again"
+        )

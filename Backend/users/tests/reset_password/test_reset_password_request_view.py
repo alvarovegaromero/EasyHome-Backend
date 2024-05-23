@@ -10,9 +10,8 @@ class ResetPasswordRequestAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.url = "/api/users/reset-password-request"
 
     @patch(
@@ -35,9 +34,7 @@ class ResetPasswordRequestAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.data["success"],
-            "Password reset successfully")
+        self.assertEqual(response.data["success"], "Password reset successfully")
 
     def test_post_reset_password_non_matching_passwords(self):
         response = self.client.post(
@@ -55,8 +52,7 @@ class ResetPasswordRequestAPIViewTest(TestCase):
     @patch(
         "users.views.reset_password.reset_password_request_view.reset_password_with_token"
     )
-    def test_post_reset_password_invalid_token(
-            self, mock_reset_password_with_token):
+    def test_post_reset_password_invalid_token(self, mock_reset_password_with_token):
         mock_reset_password_with_token.return_value = (False, "Invalid token")
         response = self.client.post(
             self.url,

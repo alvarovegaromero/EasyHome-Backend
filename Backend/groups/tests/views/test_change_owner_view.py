@@ -10,9 +10,8 @@ class GroupChangeOwnerAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.owner = User.objects.create_user(
-            username="testowner",
-            email="testowner@test.com",
-            password="testpassword")
+            username="testowner", email="testowner@test.com", password="testpassword"
+        )
         self.group = Group.objects.create(
             name="Test Group",
             description="Test Description",
@@ -23,9 +22,8 @@ class GroupChangeOwnerAPIViewTest(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
         self.new_owner = User.objects.create_user(
-            username="testuser2",
-            email="testuser2@test.com",
-            password="testpassword2")
+            username="testuser2", email="testuser2@test.com", password="testpassword2"
+        )
         UserGroup.objects.create(user=self.new_owner, group=self.group)
 
     def test_change_owner(self):
@@ -46,29 +44,24 @@ class GroupChangeOwnerAPIViewTest(TestCase):
         self.assertEqual(response.data["error"], "Group wasn't found")
 
     def test_change_owner_nonexistent_user(self):
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/change_owner/9999")
+        response = self.client.post(f"/api/groups/{self.group.id}/change_owner/9999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "User wasn't found")
 
     def test_change_owner_not_member(self):
         user_not_member = User.objects.create_user(
-            username="testuser3",
-            email="testuser3@test.com",
-            password="testpassword3")
+            username="testuser3", email="testuser3@test.com", password="testpassword3"
+        )
         response = self.client.post(
             f"/api/groups/{self.group.id}/change_owner/{user_not_member.id}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(
-            response.data["error"],
-            "User is not a member of this group")
+        self.assertEqual(response.data["error"], "User is not a member of this group")
 
     def test_change_owner_not_owner(self):
         self.client.credentials(
-            HTTP_AUTHORIZATION="Token " +
-            Token.objects.create(
-                user=self.new_owner).key)
+            HTTP_AUTHORIZATION="Token " + Token.objects.create(user=self.new_owner).key
+        )
         response = self.client.post(
             f"/api/groups/{self.group.id}/change_owner/{self.new_owner.id}"
         )

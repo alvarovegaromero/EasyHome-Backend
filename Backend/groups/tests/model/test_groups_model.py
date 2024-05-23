@@ -10,13 +10,11 @@ from shared_board.models import SharedBoard
 class GroupModelTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(
-            username="testuser1",
-            email="testuser1@test.com",
-            password="testpassword1")
+            username="testuser1", email="testuser1@test.com", password="testpassword1"
+        )
         self.user2 = User.objects.create_user(
-            username="testuser2",
-            email="testuser2@test.com",
-            password="testpassword2")
+            username="testuser2", email="testuser2@test.com", password="testpassword2"
+        )
         self.group = Group.objects.create(
             name="Test Group",
             description="Test Description",
@@ -55,8 +53,7 @@ class GroupModelTest(TestCase):
 
     def test_group_creation_creates_sharedboard_and_usergroup(self):
         shared_board = SharedBoard.objects.filter(group=self.group)
-        user_owner_group = UserGroup.objects.filter(
-            group=self.group, user=self.user1)
+        user_owner_group = UserGroup.objects.filter(group=self.group, user=self.user1)
 
         self.assertEqual(shared_board.exists(), True)
         self.assertEqual(user_owner_group.exists(), True)
@@ -65,8 +62,7 @@ class GroupModelTest(TestCase):
         group_id = self.group.id
         self.group.delete()
         shared_board = SharedBoard.objects.filter(group_id=group_id)
-        user_owner_group = UserGroup.objects.filter(
-            group_id=group_id, user=self.user1)
+        user_owner_group = UserGroup.objects.filter(group_id=group_id, user=self.user1)
 
         self.assertEqual(shared_board.exists(), False)
         self.assertEqual(user_owner_group.exists(), False)

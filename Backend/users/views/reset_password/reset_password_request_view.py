@@ -22,14 +22,11 @@ class ResetPasswordRequestAPIView(APIView):
 
             success, message = reset_password_with_token(token, new_password)
             if success:
-                return Response({"success": message},
-                                status=status.HTTP_200_OK)
+                return Response({"success": message}, status=status.HTTP_200_OK)
             else:
-                return Response({"error": message},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger.error(
-                "An error occurred during password reset: %s" %
-                str(e))
-            return Response("Internal Server Error",
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error("An error occurred during password reset: %s" % str(e))
+            return Response(
+                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

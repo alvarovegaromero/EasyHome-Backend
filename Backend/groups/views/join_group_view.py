@@ -15,8 +15,9 @@ class GroupJoinAPIView(APIView):
         join_code = request.data.get("joinCode")
 
         if not join_code:
-            return Response({"error": "Join code is required"},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Join code is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             # group that have the provided join code and have not expired (join_code_expiration later) - only one.
@@ -31,8 +32,7 @@ class GroupJoinAPIView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if UserGroup.objects.filter(
-                    user=request.user, group=group).exists():
+            if UserGroup.objects.filter(user=request.user, group=group).exists():
                 return Response(
                     {"error": "You are already a member of this group"},
                     status=status.HTTP_400_BAD_REQUEST,

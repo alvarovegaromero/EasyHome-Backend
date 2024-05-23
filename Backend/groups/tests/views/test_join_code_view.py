@@ -10,9 +10,8 @@ class GroupGenerateCodeAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         self.group = Group.objects.create(
@@ -35,13 +34,10 @@ class GroupGenerateCodeAPIViewTest(TestCase):
 
     def test_generate_code_non_member(self):
         other_user = User.objects.create_user(
-            username="otheruser",
-            email="otheruser@test.com",
-            password="testpassword")
+            username="otheruser", email="otheruser@test.com", password="testpassword"
+        )
         other_token = Token.objects.create(user=other_user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            response.data["error"],
-            "You are not a member of this group.")
+        self.assertEqual(response.data["error"], "You are not a member of this group.")

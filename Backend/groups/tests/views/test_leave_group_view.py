@@ -10,9 +10,8 @@ class GroupLeaveAPIViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.owner = User.objects.create_user(
-            username="testowner",
-            email="testowner@test.com",
-            password="testpassword")
+            username="testowner", email="testowner@test.com", password="testpassword"
+        )
         self.group = Group.objects.create(
             name="Test Group",
             description="Test Description",
@@ -22,9 +21,8 @@ class GroupLeaveAPIViewTest(TestCase):
         self.url = f"/api/groups/{self.group.id}/leave"
 
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         UserGroup.objects.create(user=self.user, group=self.group)
@@ -43,16 +41,13 @@ class GroupLeaveAPIViewTest(TestCase):
 
     def test_leave_group_not_member(self):
         other_user = User.objects.create_user(
-            username="otheruser",
-            email="otheruser@test.com",
-            password="testpassword")
+            username="otheruser", email="otheruser@test.com", password="testpassword"
+        )
         other_token = Token.objects.create(user=other_user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            response.data["error"],
-            "You do not belong to this group.")
+        self.assertEqual(response.data["error"], "You do not belong to this group.")
 
     def test_leave_group_transfer_ownership(self):
         owner_token = Token.objects.create(user=self.owner)

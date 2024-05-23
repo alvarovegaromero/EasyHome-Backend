@@ -15,12 +15,12 @@ class GroupLeaveAPIView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response({"error": "Group wasn't found"},
-                                status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
+                )
 
             try:
-                user_group = UserGroup.objects.get(
-                    user=request.user, group=group)
+                user_group = UserGroup.objects.get(user=request.user, group=group)
             except UserGroup.DoesNotExist:
                 return Response(
                     {"error": "You do not belong to this group."},
@@ -57,5 +57,6 @@ class GroupLeaveAPIView(APIView):
 
         except Exception as e:
             logger.error("An error occurred during group left: %s" % str(e))
-            return Response("Internal Server Error",
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

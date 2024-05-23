@@ -10,9 +10,8 @@ class SharedBoardViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="testuser",
-            email="testuser@test.com",
-            password="testpassword")
+            username="testuser", email="testuser@test.com", password="testpassword"
+        )
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
         self.group = Group.objects.create(
@@ -38,16 +37,13 @@ class SharedBoardViewTest(TestCase):
 
     def test_get_board_not_member(self):
         other_user = User.objects.create_user(
-            username="otheruser",
-            email="otheruser@test.com",
-            password="testpassword")
+            username="otheruser", email="otheruser@test.com", password="testpassword"
+        )
         other_token = Token.objects.create(user=other_user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            response.data["error"],
-            "You do not belong to this group.")
+        self.assertEqual(response.data["error"], "You do not belong to this group.")
 
     def test_put_board(self):
         response = self.client.put(self.url, {"content": "New Content"})
@@ -60,23 +56,19 @@ class SharedBoardViewTest(TestCase):
         self.assertEqual(self.group.sharedboard.content, "New Content")
 
     def test_put_board_non_existent_group(self):
-        response = self.client.put(
-            "/api/shared_board/9999", {"content": "New Content"})
+        response = self.client.put("/api/shared_board/9999", {"content": "New Content"})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "Group wasn't found")
 
     def test_put_board_not_member(self):
         other_user = User.objects.create_user(
-            username="otheruser",
-            email="otheruser@test.com",
-            password="testpassword")
+            username="otheruser", email="otheruser@test.com", password="testpassword"
+        )
         other_token = Token.objects.create(user=other_user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.put(self.url, {"content": "New Content"})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            response.data["error"],
-            "You do not belong to this group.")
+        self.assertEqual(response.data["error"], "You do not belong to this group.")
 
     def test_put_board_no_content(self):
         response = self.client.put(self.url, {})
@@ -92,5 +84,5 @@ class SharedBoardViewTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
         self.assertEqual(
-            response.data["error"],
-            "The board has been edited by another user.")
+            response.data["error"], "The board has been edited by another user."
+        )
