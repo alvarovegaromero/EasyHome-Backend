@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group, UserGroup
 
 
 class GroupUsersAPIViewTest(TestCase):

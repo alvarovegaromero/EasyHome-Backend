@@ -1,7 +1,6 @@
 from django.test import Client, TestCase
-from rest_framework import status
-
 from groups.currency_choices import CURRENCY_CHOICES
+from rest_framework import status
 
 
 class CurrenciesAPIViewTest(TestCase):

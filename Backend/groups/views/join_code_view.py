@@ -1,12 +1,11 @@
 from venv import logger
 
 from django.utils import timezone
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from groups.models import Group, UserGroup
 
 
 class GroupGenerateCodeAPIView(APIView):
@@ -17,9 +16,7 @@ class GroupGenerateCodeAPIView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response(
-                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
             if not UserGroup.objects.filter(user=request.user, group=group).exists():
                 return Response(
@@ -35,9 +32,7 @@ class GroupGenerateCodeAPIView(APIView):
             return Response({"join_code": join_code}, status=status.HTTP_200_OK)
 
         except Exception as e:
-            logger.error(
-                "An error occurred during group join code generation: %s" % str(e)
-            )
+            logger.error("An error occurred during group join code generation: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

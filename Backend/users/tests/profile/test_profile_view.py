@@ -49,9 +49,7 @@ class ProfileAPIViewTest(TestCase):
         self.assertEqual(response.data["error"], "User is not authenticated")
 
     def test_post_profile_no_username(self):
-        response = self.client.post(
-            self.url, {"email": "newuser@test.com"}, format="json"
-        )
+        response = self.client.post(self.url, {"email": "newuser@test.com"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "Username is required")
 

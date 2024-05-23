@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from groups.models import Group
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group
 
 
 class GroupCreateAPIViewTest(TestCase):
@@ -57,9 +56,7 @@ class GroupCreateAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(
-            response.data["detail"], "Authentication credentials were not provided."
-        )
+        self.assertEqual(response.data["detail"], "Authentication credentials were not provided.")
 
     def test_create_group_no_name(self):
         response = self.client.post(

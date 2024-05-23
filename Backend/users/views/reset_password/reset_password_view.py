@@ -17,9 +17,7 @@ class ResetPasswordAPIView(APIView):
             user = get_user_by_email(email)
 
             if user is None:
-                return Response(
-                    {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
             reset_url = generate_reset_url(user)
             reset_url = BASE_URL + reset_url
@@ -39,14 +37,9 @@ class ResetPasswordAPIView(APIView):
             )
 
             send_mail(subject, message, from_email, to_email, fail_silently=False)
-            return Response(
-                {"success": "Email sent succesfully"}, status=status.HTTP_200_OK
-            )
+            return Response({"success": "Email sent succesfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(
-                "An error occurred during sending the "
-                + "resetting password email: %s" % str(e)
+                "An error occurred during sending the " + "resetting password email: %s" % str(e)
             )
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

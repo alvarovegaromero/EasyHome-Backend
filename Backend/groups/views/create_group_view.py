@@ -1,12 +1,11 @@
 from venv import logger
 
 from django.db import transaction
+from groups.models import Group
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from groups.models import Group
 
 
 class GroupCreateAPIView(APIView):
@@ -14,9 +13,7 @@ class GroupCreateAPIView(APIView):
 
     def post(self, request):
         name = request.data.get("name")
-        description = request.data.get(
-            "description", ""
-        )  # empty string if not provided
+        description = request.data.get("description", "")  # empty string if not provided
         currency = request.data.get("currency")
 
         if not name or not currency:

@@ -27,9 +27,7 @@ class ProfileAPIView(APIView):
                 )
         except Exception as e:
             logger.error("An error occurred during profile retrieval: %s" % str(e))
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
         try:
@@ -61,11 +59,7 @@ class ProfileAPIView(APIView):
                     user.username = username
 
                 if email != user.email:
-                    if (
-                        User.objects.filter(email=email)
-                        .exclude(username=user.username)
-                        .exists()
-                    ):
+                    if User.objects.filter(email=email).exclude(username=user.username).exists():
                         return Response(
                             {"error": "Email already in use"},
                             status=status.HTTP_400_BAD_REQUEST,
@@ -95,6 +89,4 @@ class ProfileAPIView(APIView):
                 )
         except Exception as e:
             logger.error("An error occurred during profile update: %s" % str(e))
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

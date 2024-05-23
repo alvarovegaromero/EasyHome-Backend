@@ -14,9 +14,7 @@ class ResetPasswordRequestAPIViewTest(TestCase):
         )
         self.url = "/api/users/reset-password-request"
 
-    @patch(
-        "users.views.reset_password.reset_password_request_view.reset_password_with_token"
-    )
+    @patch("users.views.reset_password.reset_password_request_view.reset_password_with_token")
     def test_post_reset_password_valid_token_and_matching_passwords(
         self, mock_reset_password_with_token
     ):
@@ -49,9 +47,7 @@ class ResetPasswordRequestAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "Passwords do not match")
 
-    @patch(
-        "users.views.reset_password.reset_password_request_view.reset_password_with_token"
-    )
+    @patch("users.views.reset_password.reset_password_request_view.reset_password_with_token")
     def test_post_reset_password_invalid_token(self, mock_reset_password_with_token):
         mock_reset_password_with_token.return_value = (False, "Invalid token")
         response = self.client.post(

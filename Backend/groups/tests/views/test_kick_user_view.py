@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group, UserGroup
 
 
 class GroupKickUserAPIViewTest(TestCase):
@@ -28,9 +27,7 @@ class GroupKickUserAPIViewTest(TestCase):
         UserGroup.objects.create(user=self.user_to_kick, group=self.group)
 
     def test_kick_user(self):
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/kick/{self.user_to_kick.id}"
-        )
+        response = self.client.post(f"/api/groups/{self.group.id}/kick/{self.user_to_kick.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data["success"], "User has been succesfully kicked from the group"
@@ -50,16 +47,13 @@ class GroupKickUserAPIViewTest(TestCase):
         user_not_member = User.objects.create_user(
             username="testuser3", email="testuser3@test.com", password="testpassword3"
         )
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/kick/{user_not_member.id}"
-        )
+        response = self.client.post(f"/api/groups/{self.group.id}/kick/{user_not_member.id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "User is not a member of this group")
 
     def test_kick_user_not_owner(self):
         self.client.credentials(
-            HTTP_AUTHORIZATION="Token "
-            + Token.objects.create(user=self.user_to_kick).key
+            HTTP_AUTHORIZATION="Token " + Token.objects.create(user=self.user_to_kick).key
         )
         response = self.client.post(f"/api/groups/{self.group.id}/kick/{self.owner.id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

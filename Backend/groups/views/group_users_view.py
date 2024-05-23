@@ -1,12 +1,10 @@
 from venv import logger
 
-from django.contrib.auth.models import User
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from groups.models import Group, UserGroup
 
 
 class GroupUsersAPIView(APIView):
@@ -17,9 +15,7 @@ class GroupUsersAPIView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response(
-                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
             if not UserGroup.objects.filter(user=request.user, group=group).exists():
                 return Response(
@@ -31,6 +27,4 @@ class GroupUsersAPIView(APIView):
 
         except Exception as e:
             logger.error("An error occurred during ownership change: %s" % str(e))
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

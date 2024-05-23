@@ -3,11 +3,10 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group, UserGroup
 
 
 class GroupJoinAPIViewTest(TestCase):
@@ -36,9 +35,7 @@ class GroupJoinAPIViewTest(TestCase):
     def test_join_group(self):
         response = self.client.post(self.url, {"joinCode": self.group.join_code})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.data["success"], "You have joined the group successfully."
-        )
+        self.assertEqual(response.data["success"], "You have joined the group successfully.")
         self.assertEqual(response.data["id"], self.group.id)
 
     def test_join_group_without_code(self):
@@ -62,6 +59,4 @@ class GroupJoinAPIViewTest(TestCase):
         UserGroup.objects.create(user=self.user, group=self.group)
         response = self.client.post(self.url, {"joinCode": self.group.join_code})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data["error"], "You are already a member of this group"
-        )
+        self.assertEqual(response.data["error"], "You are already a member of this group")

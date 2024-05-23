@@ -24,9 +24,7 @@ class LoginAPIViewTest(TestCase):
         self.assertEqual(response.data["id"], self.user.id)
 
     def test_login_no_username(self):
-        response = self.client.post(
-            self.url, {"password": "testpassword"}, format="json"
-        )
+        response = self.client.post(self.url, {"password": "testpassword"}, format="json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["error"], "Username and password are required")
 

@@ -21,9 +21,7 @@ class RegisterAPIView(APIView):
             # Validations:
             if not username or not password or not confirmation_password or not email:
                 return Response(
-                    {
-                        "error": "Username, password, confirmation password and email are required"
-                    },
+                    {"error": "Username, password, confirmation password and email are required"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             if password != confirmation_password:
@@ -66,6 +64,4 @@ class RegisterAPIView(APIView):
 
         except Exception as e:
             logger.error("An error occurred during user registration: %s" % str(e))
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

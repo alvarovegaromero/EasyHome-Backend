@@ -85,8 +85,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name="usergroup",
-            constraint=models.UniqueConstraint(
-                fields=("user", "group"), name="unique_usergroup"
-            ),
+            constraint=models.UniqueConstraint(fields=("user", "group"), name="unique_usergroup"),
         ),
     ]

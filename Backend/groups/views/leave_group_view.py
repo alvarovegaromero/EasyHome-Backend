@@ -1,11 +1,10 @@
 from venv import logger
 
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from groups.models import Group, UserGroup
 
 
 class GroupLeaveAPIView(APIView):
@@ -16,9 +15,7 @@ class GroupLeaveAPIView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response(
-                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
             try:
                 user_group = UserGroup.objects.get(user=request.user, group=group)
@@ -41,7 +38,8 @@ class GroupLeaveAPIView(APIView):
                 if next_owner_user_group is None:
                     return Response(
                         {
-                            "error": "You are the last member of the group. Please delete the group instead."
+                            "error": "You are the last member of the group. "
+                            "Please delete the group instead."
                         },
                         status=status.HTTP_400_BAD_REQUEST,
                     )
@@ -58,6 +56,4 @@ class GroupLeaveAPIView(APIView):
 
         except Exception as e:
             logger.error("An error occurred during group left: %s" % str(e))
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

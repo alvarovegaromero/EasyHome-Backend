@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group, UserGroup
 
 
 class GroupLeaveAPIViewTest(TestCase):
@@ -31,9 +30,7 @@ class GroupLeaveAPIViewTest(TestCase):
     def test_leave_group(self):
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.data["success"], "You have left the group successfully."
-        )
+        self.assertEqual(response.data["success"], "You have left the group successfully.")
 
     def test_leave_nonexistent_group(self):
         response = self.client.post(f"/api/groups/9999/leave")

@@ -3,7 +3,6 @@ import string
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
-
 from groups.models import Group, UserGroup
 from shared_board.models import SharedBoard
 
@@ -28,9 +27,7 @@ class GroupModelTest(TestCase):
         join_code = self.group.generate_join_code()
         self.assertEqual(len(join_code), 30)
         # Check that the join code only contains letters and digits
-        self.assertTrue(
-            all(c in string.ascii_letters + string.digits for c in join_code)
-        )
+        self.assertTrue(all(c in string.ascii_letters + string.digits for c in join_code))
         self.assertEqual(self.group.join_code, join_code)
         # Check that the expiration date is in the future
         self.assertGreater(self.group.join_code_expiration, timezone.now())

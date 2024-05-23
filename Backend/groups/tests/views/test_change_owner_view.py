@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group, UserGroup
 
 
 class GroupChangeOwnerAPIViewTest(TestCase):
@@ -28,9 +27,7 @@ class GroupChangeOwnerAPIViewTest(TestCase):
         UserGroup.objects.create(user=self.new_owner, group=self.group)
 
     def test_change_owner(self):
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/change_owner/{self.new_owner.id}"
-        )
+        response = self.client.post(f"/api/groups/{self.group.id}/change_owner/{self.new_owner.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data["success"],
@@ -38,9 +35,7 @@ class GroupChangeOwnerAPIViewTest(TestCase):
         )
 
     def test_change_owner_nonexistent_group(self):
-        response = self.client.post(
-            f"/api/groups/9999/change_owner/{self.new_owner.id}"
-        )
+        response = self.client.post(f"/api/groups/9999/change_owner/{self.new_owner.id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "Group wasn't found")
 
@@ -63,19 +58,11 @@ class GroupChangeOwnerAPIViewTest(TestCase):
         self.client.credentials(
             HTTP_AUTHORIZATION="Token " + Token.objects.create(user=self.new_owner).key
         )
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/change_owner/{self.new_owner.id}"
-        )
+        response = self.client.post(f"/api/groups/{self.group.id}/change_owner/{self.new_owner.id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(
-            response.data["error"], "Only the group owner can change ownership"
-        )
+        self.assertEqual(response.data["error"], "Only the group owner can change ownership")
 
     def test_change_owner_self(self):
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/change_owner/{self.owner.id}"
-        )
+        response = self.client.post(f"/api/groups/{self.group.id}/change_owner/{self.owner.id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data["error"], "You are already the owner of the group"
-        )
+        self.assertEqual(response.data["error"], "You are already the owner of the group")

@@ -33,6 +33,4 @@ class LoginAPIView(APIView):
                 )
         except Exception as e:
             logger.error("An error occurred during log in: %s" % str(e))
-            return Response(
-                "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

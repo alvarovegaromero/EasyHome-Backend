@@ -1,12 +1,11 @@
 from venv import logger
 
 from django.utils import timezone
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from groups.models import Group, UserGroup
 
 
 class GroupJoinAPIView(APIView):
@@ -16,13 +15,11 @@ class GroupJoinAPIView(APIView):
         join_code = request.data.get("joinCode")
 
         if not join_code:
-            return Response(
-                {"error": "Join code is required"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": "Join code is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # group that have the provided join code and have not expired (join_code_expiration later) - only one.
-            # maybe can be a function in the Group model
+            # group that have the provided join code and have not expired
+            # (join_code_expiration later) - only one. maybe can be a function in the Group model
             group = Group.objects.filter(
                 join_code=join_code, join_code_expiration__gt=timezone.now()
             ).first()

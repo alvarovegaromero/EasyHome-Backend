@@ -1,11 +1,10 @@
 from venv import logger
 
+from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from groups.models import Group, UserGroup
 from shared_board.models import SharedBoard
 
 
@@ -17,9 +16,7 @@ class SharedBoardView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response(
-                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
             if not UserGroup.objects.filter(user=request.user, group=group).exists():
                 return Response(
@@ -69,9 +66,7 @@ class SharedBoardView(APIView):
             try:
                 group = Group.objects.get(id=group_id)
             except Group.DoesNotExist:
-                return Response(
-                    {"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
             if not UserGroup.objects.filter(user=request.user, group=group).exists():
                 return Response(

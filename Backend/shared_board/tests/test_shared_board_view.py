@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from groups.models import Group
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-
-from groups.models import Group
 
 
 class SharedBoardViewTest(TestCase):
@@ -49,9 +48,7 @@ class SharedBoardViewTest(TestCase):
     def test_put_board(self):
         response = self.client.put(self.url, {"content": "New Content"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.data["message"], "Board content updated successfully."
-        )
+        self.assertEqual(response.data["message"], "Board content updated successfully.")
         self.assertEqual(response.data["content"], "New Content")
         self.group.refresh_from_db()  # Refresh the Group instance from DB
         self.assertEqual(self.group.sharedboard.content, "New Content")
@@ -84,6 +81,4 @@ class SharedBoardViewTest(TestCase):
         response = self.client.put(self.url, {"content": "New Content"})
 
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
-        self.assertEqual(
-            response.data["error"], "The board has been edited by another user."
-        )
+        self.assertEqual(response.data["error"], "The board has been edited by another user.")

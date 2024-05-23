@@ -74,9 +74,7 @@ class RegisterAPIViewTest(TestCase):
         self.assertEqual(response.data["error"], "Passwords do not match")
 
     def test_register_username_already_exists(self):
-        User.objects.create_user(
-            username="testuser", email="b@b.com", password="testpassword"
-        )
+        User.objects.create_user(username="testuser", email="b@b.com", password="testpassword")
         response = self.client.post(
             self.url,
             {
@@ -91,9 +89,7 @@ class RegisterAPIViewTest(TestCase):
         self.assertEqual(response.data["error"], "Username already exists")
 
     def test_register_email_already_exists(self):
-        User.objects.create_user(
-            username="otheruser", email="a@a.com", password="testpassword"
-        )
+        User.objects.create_user(username="otheruser", email="a@a.com", password="testpassword")
         response = self.client.post(
             self.url,
             {
