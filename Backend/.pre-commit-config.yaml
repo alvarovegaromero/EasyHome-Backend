@@ -7,7 +7,11 @@ repos:
     rev: v2.0.4  
     hooks:
       - id: autopep8
-        args: [--in-place, --aggressive, --aggressive]
+        args: [--in-place, --aggressive, --aggressive]  
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2  
+    hooks:
+      - id: isort
   - repo: https://github.com/pycqa/flake8
     rev: 3.7.9 
     hooks:
