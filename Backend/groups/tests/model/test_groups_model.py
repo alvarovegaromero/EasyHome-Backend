@@ -53,8 +53,7 @@ class GroupModelTest(TestCase):
 
     def test_group_creation_creates_sharedboard_and_usergroup(self):
         shared_board = SharedBoard.objects.filter(group=self.group)
-        user_owner_group = UserGroup.objects.filter(
-            group=self.group, user=self.user1)
+        user_owner_group = UserGroup.objects.filter(group=self.group, user=self.user1)
 
         self.assertEqual(shared_board.exists(), True)
         self.assertEqual(user_owner_group.exists(), True)
@@ -63,8 +62,7 @@ class GroupModelTest(TestCase):
         group_id = self.group.id
         self.group.delete()
         shared_board = SharedBoard.objects.filter(group_id=group_id)
-        user_owner_group = UserGroup.objects.filter(
-            group_id=group_id, user=self.user1)
+        user_owner_group = UserGroup.objects.filter(group_id=group_id, user=self.user1)
 
         self.assertEqual(shared_board.exists(), False)
         self.assertEqual(user_owner_group.exists(), False)

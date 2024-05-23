@@ -13,8 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="group",
             name="join_code",
-            field=models.CharField(
-                blank=True, max_length=30, null=True, unique=True),
+            field=models.CharField(blank=True, max_length=30, null=True, unique=True),
         ),
         migrations.AddField(
             model_name="group",

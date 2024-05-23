@@ -58,8 +58,7 @@ class GroupChangeOwnerAPIView(APIView):
             )
 
         except Exception as e:
-            logger.error(
-                "An error occurred during ownership change: %s" % str(e))
+            logger.error("An error occurred during ownership change: %s" % str(e))
             return Response(
                 "Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

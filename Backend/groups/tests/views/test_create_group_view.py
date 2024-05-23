@@ -67,8 +67,7 @@ class GroupCreateAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"],
-                         "Name and currency are required")
+        self.assertEqual(response.data["error"], "Name and currency are required")
 
     def test_create_group_no_currency(self):
         response = self.client.post(
@@ -77,5 +76,4 @@ class GroupCreateAPIViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"],
-                         "Name and currency are required")
+        self.assertEqual(response.data["error"], "Name and currency are required")

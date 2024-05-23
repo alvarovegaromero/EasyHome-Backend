@@ -33,8 +33,7 @@ class GroupJoinAPIViewTest(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
 
     def test_join_group(self):
-        response = self.client.post(
-            self.url, {"joinCode": self.group.join_code})
+        response = self.client.post(self.url, {"joinCode": self.group.join_code})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data["success"], "You have joined the group successfully."
@@ -49,22 +48,18 @@ class GroupJoinAPIViewTest(TestCase):
     def test_expired_join_code(self):
         self.group.join_code_expiration = timezone.now() - timedelta(weeks=1)
         self.group.save()
-        response = self.client.post(
-            self.url, {"joinCode": self.group.join_code})
+        response = self.client.post(self.url, {"joinCode": self.group.join_code})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"],
-                         "Invalid or expired join code")
+        self.assertEqual(response.data["error"], "Invalid or expired join code")
 
     def test_join_group_invalid_code(self):
         response = self.client.post(self.url, {"joinCode": "invalid_code"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["error"],
-                         "Invalid or expired join code")
+        self.assertEqual(response.data["error"], "Invalid or expired join code")
 
     def test_join_group_already_member(self):
         UserGroup.objects.create(user=self.user, group=self.group)
-        response = self.client.post(
-            self.url, {"joinCode": self.group.join_code})
+        response = self.client.post(self.url, {"joinCode": self.group.join_code})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data["error"], "You are already a member of this group"

@@ -44,8 +44,7 @@ class GroupChangeOwnerAPIViewTest(TestCase):
         self.assertEqual(response.data["error"], "Group wasn't found")
 
     def test_change_owner_nonexistent_user(self):
-        response = self.client.post(
-            f"/api/groups/{self.group.id}/change_owner/9999")
+        response = self.client.post(f"/api/groups/{self.group.id}/change_owner/9999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "User wasn't found")
 
@@ -57,13 +56,11 @@ class GroupChangeOwnerAPIViewTest(TestCase):
             f"/api/groups/{self.group.id}/change_owner/{user_not_member.id}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data["error"],
-                         "User is not a member of this group")
+        self.assertEqual(response.data["error"], "User is not a member of this group")
 
     def test_change_owner_not_owner(self):
         self.client.credentials(
-            HTTP_AUTHORIZATION="Token " +
-            Token.objects.create(user=self.new_owner).key
+            HTTP_AUTHORIZATION="Token " + Token.objects.create(user=self.new_owner).key
         )
         response = self.client.post(
             f"/api/groups/{self.group.id}/change_owner/{self.new_owner.id}"

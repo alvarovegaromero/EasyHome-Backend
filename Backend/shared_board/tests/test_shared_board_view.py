@@ -43,8 +43,7 @@ class SharedBoardViewTest(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data["error"],
-                         "You do not belong to this group.")
+        self.assertEqual(response.data["error"], "You do not belong to this group.")
 
     def test_put_board(self):
         response = self.client.put(self.url, {"content": "New Content"})
@@ -57,8 +56,7 @@ class SharedBoardViewTest(TestCase):
         self.assertEqual(self.group.sharedboard.content, "New Content")
 
     def test_put_board_non_existent_group(self):
-        response = self.client.put(
-            "/api/shared_board/9999", {"content": "New Content"})
+        response = self.client.put("/api/shared_board/9999", {"content": "New Content"})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "Group wasn't found")
 
@@ -70,8 +68,7 @@ class SharedBoardViewTest(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Token " + other_token.key)
         response = self.client.put(self.url, {"content": "New Content"})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response.data["error"],
-                         "You do not belong to this group.")
+        self.assertEqual(response.data["error"], "You do not belong to this group.")
 
     def test_put_board_no_content(self):
         response = self.client.put(self.url, {})

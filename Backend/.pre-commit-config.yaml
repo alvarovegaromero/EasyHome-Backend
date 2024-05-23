@@ -3,11 +3,6 @@ repos:
     rev: 22.3.0  
     hooks:
       - id: black
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v2.0.4  
-    hooks:
-      - id: autopep8
-        args: [--in-place, --aggressive, --aggressive]  
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2  
     hooks:
