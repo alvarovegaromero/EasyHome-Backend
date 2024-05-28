@@ -16,4 +16,9 @@ urlpatterns = [
     path("api/users/", include("users.urls"), name="users"),
     path("api/groups/", include("groups.urls"), name="groups"),
     path("api/shared_board/", include("shared_board.urls"), name="shared_board"),
+    path(
+        "api/expense_distribution/",
+        include("expense_distribution.urls"),
+        name="expense_distribution",
+    ),
 ]
