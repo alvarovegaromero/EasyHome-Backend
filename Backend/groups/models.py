@@ -51,7 +51,7 @@ class Group(models.Model):
             {
                 "id": expense.id,
                 "name": expense.name,
-                "amount": "{0:.1f}".format(expense.amount),
+                "amount": "{0:.2f}".format(expense.amount),
                 "paid_by": expense.paid_by.username,
                 "debtors": [debtor.username for debtor in expense.debtors.all()],
                 "date_added": expense.date_added,

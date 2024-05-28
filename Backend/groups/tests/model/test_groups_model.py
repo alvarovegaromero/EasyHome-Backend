@@ -26,7 +26,7 @@ class GroupModelTest(TestCase):
 
         self.expense1 = Expense.objects.create(
             name="Expense 1",
-            amount=100.0,
+            amount=100.20,
             paid_by=self.user1,
             group=self.group,
         )
@@ -34,7 +34,7 @@ class GroupModelTest(TestCase):
 
         self.expense2 = Expense.objects.create(
             name="Expense 2",
-            amount=200.0,
+            amount=200.05,
             paid_by=self.user2,
             group=self.group,
         )
@@ -73,7 +73,7 @@ class GroupModelTest(TestCase):
         for expense in expenses:
             if expense["id"] == self.expense1.id:
                 self.assertEqual(expense["name"], self.expense1.name)
-                self.assertEqual(expense["amount"], str(self.expense1.amount))
+                self.assertEqual(expense["amount"], "{0:.2f}".format(self.expense1.amount))
                 self.assertEqual(expense["paid_by"], self.user1.username)
                 self.assertCountEqual(
                     expense["debtors"], [self.user1.username, self.user2.username]
@@ -82,7 +82,7 @@ class GroupModelTest(TestCase):
                 self.assertEqual(expense["date_paid"], self.expense1.date_paid)
             elif expense["id"] == self.expense2.id:
                 self.assertEqual(expense["name"], self.expense2.name)
-                self.assertEqual(expense["amount"], str(self.expense2.amount))
+                self.assertEqual(expense["amount"], "{0:.2f}".format(self.expense2.amount))
                 self.assertEqual(expense["paid_by"], self.user2.username)
                 self.assertCountEqual(expense["debtors"], [self.user1.username])
                 self.assertEqual(expense["date_added"], self.expense2.date_added)
