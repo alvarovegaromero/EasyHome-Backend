@@ -3,6 +3,7 @@ import string
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
+from expense_distribution.models import Expense
 from groups.models import Group, UserGroup
 from shared_board.models import SharedBoard
 
@@ -22,6 +23,22 @@ class GroupModelTest(TestCase):
             owner=self.user1,
         )
         UserGroup.objects.create(user=self.user2, group=self.group)
+
+        self.expense1 = Expense.objects.create(
+            name="Expense 1",
+            amount=100.0,
+            paid_by=self.user1,
+            group=self.group,
+        )
+        self.expense1.debtors.set([self.user1, self.user2])
+
+        self.expense2 = Expense.objects.create(
+            name="Expense 2",
+            amount=200.0,
+            paid_by=self.user2,
+            group=self.group,
+        )
+        self.expense2.debtors.set([self.user1])
 
     def test_generate_join_code(self):
         join_code = self.group.generate_join_code()
@@ -49,6 +66,28 @@ class GroupModelTest(TestCase):
                 self.assertEqual(user["id"], self.user2.id)
                 self.assertFalse(user["is_owner"])
 
+    def test_get_expenses(self):
+        expenses = self.group.get_expenses()
+        self.assertEqual(len(expenses), 2)
+
+        for expense in expenses:
+            if expense["id"] == self.expense1.id:
+                self.assertEqual(expense["name"], self.expense1.name)
+                self.assertEqual(expense["amount"], str(self.expense1.amount))
+                self.assertEqual(expense["paid_by"], self.user1.username)
+                self.assertCountEqual(
+                    expense["debtors"], [self.user1.username, self.user2.username]
+                )
+                self.assertEqual(expense["date_added"], self.expense1.date_added)
+                self.assertEqual(expense["date_paid"], self.expense1.date_paid)
+            elif expense["id"] == self.expense2.id:
+                self.assertEqual(expense["name"], self.expense2.name)
+                self.assertEqual(expense["amount"], str(self.expense2.amount))
+                self.assertEqual(expense["paid_by"], self.user2.username)
+                self.assertCountEqual(expense["debtors"], [self.user1.username])
+                self.assertEqual(expense["date_added"], self.expense2.date_added)
+                self.assertEqual(expense["date_paid"], self.expense2.date_paid)
+
     def test_group_creation_creates_sharedboard_and_usergroup(self):
         shared_board = SharedBoard.objects.filter(group=self.group)
         user_owner_group = UserGroup.objects.filter(group=self.group, user=self.user1)
@@ -56,11 +95,16 @@ class GroupModelTest(TestCase):
         self.assertEqual(shared_board.exists(), True)
         self.assertEqual(user_owner_group.exists(), True)
 
-    def test_group_delete_deletes_sharedboard_and_usergroup(self):
+    def test_group_delete_deletes_sharedboard_usergroup_and_expenses(self):
         group_id = self.group.id
         self.group.delete()
         shared_board = SharedBoard.objects.filter(group_id=group_id)
         user_owner_group = UserGroup.objects.filter(group_id=group_id, user=self.user1)
 
+        expense1 = Expense.objects.filter(id=self.expense1.id)
+        expense2 = Expense.objects.filter(id=self.expense2.id)
+
         self.assertEqual(shared_board.exists(), False)
         self.assertEqual(user_owner_group.exists(), False)
+        self.assertEqual(expense1.exists(), False)
+        self.assertEqual(expense2.exists(), False)

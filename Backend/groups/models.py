@@ -49,14 +49,15 @@ class Group(models.Model):
     def get_expenses(self):
         return [
             {
+                "id": expense.id,
                 "name": expense.name,
-                "amount": expense.amount,
+                "amount": "{0:.1f}".format(expense.amount),
                 "paid_by": expense.paid_by.username,
                 "debtors": [debtor.username for debtor in expense.debtors.all()],
                 "date_added": expense.date_added,
                 "date_paid": expense.date_paid,
             }
-            for expense in self.expense_set.all()
+            for expense in self.expenses.all()
         ]
 
     def __str__(self):
