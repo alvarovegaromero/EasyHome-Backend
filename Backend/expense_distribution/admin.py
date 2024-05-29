@@ -1,9 +1,11 @@
 from django.contrib import admin
 
+from .forms import ExpenseForm
 from .models import Expense
 
 
 class ExpenseAdmin(admin.ModelAdmin):
+    form = ExpenseForm
     list_display = ("name", "get_group_name", "get_group_id")
 
     def get_group_name(self, obj):
@@ -18,5 +20,3 @@ class ExpenseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Expense, ExpenseAdmin)
-
-# try to choose only among group members once the group is selected
