@@ -2,8 +2,6 @@ from django.contrib import admin
 
 from .models import SharedBoard
 
-# Register your models here.
-
 
 class SharedBoardAdmin(admin.ModelAdmin):
     list_display = ("get_group_name", "get_group_id")

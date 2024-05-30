@@ -5,7 +5,7 @@ from .models import Expense
 
 
 class ExpenseAdmin(admin.ModelAdmin):
-    form = ExpenseForm
+    form = ExpenseForm  # form created to check if the user who paid and the debtors are members
     list_display = ("name", "get_group_name", "get_group_id")
 
     def get_group_name(self, obj):
