@@ -90,3 +90,7 @@ class UserGroup(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.group.name}"
+
+    @staticmethod
+    def is_member(user, group):
+        return UserGroup.objects.filter(user=user, group=group).exists()
