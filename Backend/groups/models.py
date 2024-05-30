@@ -47,18 +47,7 @@ class Group(models.Model):
         ]
 
     def get_expenses(self):
-        return [
-            {
-                "id": expense.id,
-                "name": expense.name,
-                "amount": "{0:.2f}".format(expense.amount),
-                "paid_by": expense.paid_by.username,
-                "debtors": [debtor.username for debtor in expense.debtors.all()],
-                "date_added": expense.date_added,
-                "date_paid": expense.date_paid,
-            }
-            for expense in self.expenses.all()
-        ]
+        return self.expenses.all()
 
     def __str__(self):
         return self.name

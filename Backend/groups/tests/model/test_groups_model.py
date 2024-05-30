@@ -1,4 +1,5 @@
 import string
+from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -71,22 +72,25 @@ class GroupModelTest(TestCase):
         self.assertEqual(len(expenses), 2)
 
         for expense in expenses:
-            if expense["id"] == self.expense1.id:
-                self.assertEqual(expense["name"], self.expense1.name)
-                self.assertEqual(expense["amount"], "{0:.2f}".format(self.expense1.amount))
-                self.assertEqual(expense["paid_by"], self.user1.username)
+            if expense.id == self.expense1.id:
+                self.assertEqual(expense.name, self.expense1.name)
+                self.assertEqual(expense.amount, Decimal(str(self.expense1.amount)))
+                self.assertEqual(expense.paid_by.username, self.user1.username)
                 self.assertCountEqual(
-                    expense["debtors"], [self.user1.username, self.user2.username]
+                    [debtor.username for debtor in expense.debtors.all()],
+                    [self.user1.username, self.user2.username],
                 )
-                self.assertEqual(expense["date_added"], self.expense1.date_added)
-                self.assertEqual(expense["date_paid"], self.expense1.date_paid)
-            elif expense["id"] == self.expense2.id:
-                self.assertEqual(expense["name"], self.expense2.name)
-                self.assertEqual(expense["amount"], "{0:.2f}".format(self.expense2.amount))
-                self.assertEqual(expense["paid_by"], self.user2.username)
-                self.assertCountEqual(expense["debtors"], [self.user1.username])
-                self.assertEqual(expense["date_added"], self.expense2.date_added)
-                self.assertEqual(expense["date_paid"], self.expense2.date_paid)
+                self.assertEqual(expense.date_added, self.expense1.date_added)
+                self.assertEqual(expense.date_paid, self.expense1.date_paid)
+            elif expense.id == self.expense2.id:
+                self.assertEqual(expense.name, self.expense2.name)
+                self.assertEqual(expense.amount, Decimal(str(self.expense2.amount)))
+                self.assertEqual(expense.paid_by.username, self.user2.username)
+                self.assertCountEqual(
+                    [debtor.username for debtor in expense.debtors.all()], [self.user1.username]
+                )
+                self.assertEqual(expense.date_added, self.expense2.date_added)
+                self.assertEqual(expense.date_paid, self.expense2.date_paid)
 
     def test_group_creation_creates_sharedboard_and_usergroup(self):
         shared_board = SharedBoard.objects.filter(group=self.group)
