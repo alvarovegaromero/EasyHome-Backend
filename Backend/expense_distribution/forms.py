@@ -1,6 +1,7 @@
 from django import forms
+from groups.models import UserGroup
 
-from .models import Expense, UserGroup
+from .models import Expense
 
 
 class ExpenseForm(forms.ModelForm):
