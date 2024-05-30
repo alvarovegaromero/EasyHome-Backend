@@ -1,5 +1,6 @@
 from venv import logger
 
+from expense_distribution.serializers import ExpenseSerializer
 from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -23,7 +24,9 @@ class GroupExpensesView(APIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-            return Response({"expenses": group.get_expenses()}, status=status.HTTP_200_OK)
+            expenses = group.get_expenses()
+            serializer = ExpenseSerializer(expenses, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
             logger.error("An error occurred during expulsion: %s" % str(e))
