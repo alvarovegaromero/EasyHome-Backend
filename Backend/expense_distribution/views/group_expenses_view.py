@@ -18,7 +18,7 @@ class GroupExpensesView(APIView):
             except Group.DoesNotExist:
                 return Response({"error": "Group wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
-            if not UserGroup.objects.filter(user=request.user, group=group).exists():
+            if not UserGroup.is_member(request.user, group):
                 return Response(
                     {"error": "You are not a member of this group"},
                     status=status.HTTP_403_FORBIDDEN,
