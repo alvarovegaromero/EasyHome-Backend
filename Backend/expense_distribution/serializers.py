@@ -14,10 +14,29 @@ class ExpenseGetSerializer(serializers.ModelSerializer):
 
 
 class ExpensePostSerializer(serializers.ModelSerializer):
-    name = serializers.CharField()
-    amount = serializers.DecimalField(max_digits=7, decimal_places=2)
-    debtors = serializers.ListField(child=serializers.IntegerField())
-    paid_by = serializers.IntegerField()
+    name = serializers.CharField(
+        error_messages={
+            "required": "Name must be provided",
+        }
+    )
+    amount = serializers.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        error_messages={
+            "required": "Amount must be provided",
+        },
+    )
+    debtors = serializers.ListField(
+        child=serializers.IntegerField(),
+        error_messages={
+            "required": "Debtors must be provided",
+        },
+    )
+    paid_by = serializers.IntegerField(
+        error_messages={
+            "required": "Paid_by must be provided",
+        }
+    )
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
     date_paid = serializers.DateTimeField(input_formats=["%Y-%m-%dT%H:%M:%S.%fZ"], required=False)
 
@@ -29,24 +48,21 @@ class ExpensePostSerializer(serializers.ModelSerializer):
         """
         Check data is valid before creating the object
         """
-        name = data.get("name")
-        amount = data.get("amount")
+        errors = {}
+
         debtors = data.get("debtors")
         paid_by = data.get("paid_by")
         group = data.get("group")
 
-        if not name or not amount:
-            raise serializers.ValidationError("Name and amount must be provided")
-
-        if not debtors or paid_by is None:
-            raise serializers.ValidationError("Debtors and paid_by must be provided")
-
         if not UserGroup.is_member_by_id(user_id=paid_by, group=group):
-            raise serializers.ValidationError("Payer must be a member of the group")
+            errors["paid_by"] = "Payer must be a member of the group"
 
         for debtor_id in debtors:
             if not UserGroup.is_member_by_id(user_id=debtor_id, group=group):
-                raise serializers.ValidationError("All debtors must be members of the group")
+                errors["debtors"] = "All debtors must be members of the group"
+
+        if errors:
+            raise serializers.ValidationError(errors)
 
         return data
 

@@ -48,7 +48,6 @@ class GroupExpensesView(APIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-            print(request.data["debtors"])
             data = request.data.copy()  # Make a mutable copy
             data["group"] = group_id
 
@@ -59,7 +58,9 @@ class GroupExpensesView(APIView):
                     {"success": expense.id},
                     status=status.HTTP_201_CREATED,
                 )
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            first_error_message = next(iter(serializer.errors.values()))[0]
+            return Response({"error": first_error_message}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             logger.error("An error occurred during expense creation: %s" % str(e))
