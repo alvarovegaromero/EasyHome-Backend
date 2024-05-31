@@ -52,7 +52,7 @@ class GroupExpensesView(APIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-            data = request.data.copy()  # Make a mutable copy
+            data = request.data.copy()
             data["group"] = group_id
 
             serializer = ExpensePostSerializer(data=data)
@@ -62,7 +62,7 @@ class GroupExpensesView(APIView):
                 expense_serializer = ExpenseDetailSerializer(expense)
 
                 return Response(
-                    {"success": expense.id, "expense": expense_serializer.data},
+                    {"expense": expense_serializer.data},
                     status=status.HTTP_201_CREATED,
                 )
 
