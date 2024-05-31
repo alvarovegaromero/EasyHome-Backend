@@ -19,11 +19,16 @@ class UserGroupModelTest(TestCase):
         )
         UserGroup.objects.create(user=self.user2, group=self.group)
 
-    def test_is_member(self):
-        user3 = User.objects.create_user(
+        self.user3 = User.objects.create_user(
             username="testuser3", email="testuser3@test.com", password="testpassword3"
         )
 
+    def test_is_member(self):
         self.assertTrue(UserGroup.is_member(self.user1, self.group))
         self.assertTrue(UserGroup.is_member(self.user2, self.group))
-        self.assertFalse(UserGroup.is_member(user3, self.group))
+        self.assertFalse(UserGroup.is_member(self.user3, self.group))
+
+    def test_is_member_by_id(self):
+        self.assertTrue(UserGroup.is_member_by_id(self.user1.id, self.group))
+        self.assertTrue(UserGroup.is_member_by_id(self.user2.id, self.group))
+        self.assertFalse(UserGroup.is_member_by_id(self.user3.id, self.group))

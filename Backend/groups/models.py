@@ -83,3 +83,7 @@ class UserGroup(models.Model):
     @staticmethod
     def is_member(user, group):
         return UserGroup.objects.filter(user=user, group=group).exists()
+
+    @staticmethod
+    def is_member_by_id(user_id, group):
+        return UserGroup.objects.filter(user_id=user_id, group=group).exists()
