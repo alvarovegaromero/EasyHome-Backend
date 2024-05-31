@@ -48,25 +48,24 @@ class ExpensePostSerializer(serializers.ModelSerializer):
         """
         Check data is valid before creating the object
         """
-        errors = {}
 
         debtors = data.get("debtors")
         paid_by = data.get("paid_by")
         group = data.get("group")
 
         if not UserGroup.is_member_by_id(user_id=paid_by, group=group):
-            errors["paid_by"] = "Payer must be a member of the group"
+            raise serializers.ValidationError("Payer must be a member of the group")
 
         for debtor_id in debtors:
             if not UserGroup.is_member_by_id(user_id=debtor_id, group=group):
-                errors["debtors"] = "All debtors must be members of the group"
-
-        if errors:
-            raise serializers.ValidationError(errors)
+                raise serializers.ValidationError("All debtors must be members of the group")
 
         return data
 
     def create(self, validated_data):
+        """
+        Create and return a new `Expense` instance, given the validated data.
+        """
         name = validated_data.get("name")
         amount = validated_data.get("amount")
         debtors = validated_data.get("debtors")
