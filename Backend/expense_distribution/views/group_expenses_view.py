@@ -1,6 +1,7 @@
 from venv import logger
 
 from expense_distribution.serializers import (
+    ExpenseDetailSerializer,
     ExpensePostSerializer,
     ExpensesGetSerializer,
 )
@@ -57,8 +58,11 @@ class GroupExpensesView(APIView):
             serializer = ExpensePostSerializer(data=data)
             if serializer.is_valid():
                 expense = serializer.save()
+
+                expense_serializer = ExpenseDetailSerializer(expense)
+
                 return Response(
-                    {"success": expense.id},
+                    {"success": expense.id, "expense": expense_serializer.data},
                     status=status.HTTP_201_CREATED,
                 )
 
