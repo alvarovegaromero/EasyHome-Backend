@@ -5,7 +5,7 @@ from rest_framework import serializers
 from .models import Expense
 
 
-class ExpenseGetSerializer(serializers.ModelSerializer):
+class ExpensesGetSerializer(serializers.ModelSerializer):
     paid_by_username = serializers.CharField(source="paid_by.username", read_only=True)
 
     class Meta:

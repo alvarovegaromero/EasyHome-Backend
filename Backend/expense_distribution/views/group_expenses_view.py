@@ -1,6 +1,9 @@
 from venv import logger
 
-from expense_distribution.serializers import ExpenseGetSerializer, ExpensePostSerializer
+from expense_distribution.serializers import (
+    ExpensePostSerializer,
+    ExpensesGetSerializer,
+)
 from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -25,7 +28,7 @@ class GroupExpensesView(APIView):
                 )
 
             expenses = group.get_expenses()
-            serializer = ExpenseGetSerializer(expenses, many=True)
+            serializer = ExpensesGetSerializer(expenses, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
