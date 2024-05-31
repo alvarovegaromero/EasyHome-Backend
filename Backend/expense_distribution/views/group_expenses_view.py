@@ -33,7 +33,7 @@ class GroupExpensesView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
-            logger.error("An error occurred during expulsion: %s" % str(e))
+            logger.error("An error occurred during expenses retrieval: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
