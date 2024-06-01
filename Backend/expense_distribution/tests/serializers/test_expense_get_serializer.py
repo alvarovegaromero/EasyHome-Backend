@@ -6,9 +6,8 @@ from ...models import Expense
 from ...serializers.expenses_get_serializer import ExpensesGetSerializer
 
 
-class ExpensesGetSerializerTest(TestCase):
+class ExpenseGetSerializerTest(TestCase):
     def test_expenses_get_serializer(self):
-        # Create a User instance
         user = User.objects.create_user(
             username="testuser", email="testuser@test.com", password="testpassword"
         )
@@ -20,7 +19,6 @@ class ExpensesGetSerializerTest(TestCase):
             owner=user,
         )
 
-        # Create an Expense instance
         expense = Expense.objects.create(
             name="Test Expense",
             amount=100.00,
@@ -28,10 +26,8 @@ class ExpensesGetSerializerTest(TestCase):
             group=group,
         )
 
-        # Serialize the Expense instance
         serializer = ExpensesGetSerializer(expense)
 
-        # Check that the serialized data matches the expected result
         self.assertEqual(
             serializer.data,
             {
