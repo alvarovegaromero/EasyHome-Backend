@@ -1,3 +1,5 @@
+from decimal import ROUND_DOWN, Decimal
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -19,17 +21,23 @@ class Expense(models.Model):
         Cash flow minimization algorithm.
         Efficiency: O(n*log(n))
         """
+
         net_amounts = {}
         for expense in expenses:
-            amount_per_debtor = expense.amount / len(expense.debtors.all())
-            net_amounts[expense.paid_by.id] = (
-                net_amounts.get(expense.paid_by.id, 0) + expense.amount
-            )  # Use User ID
+            debtors = list(expense.debtors.all())
+            total_amount = expense.amount
+            net_amounts[expense.paid_by.id] = net_amounts.get(expense.paid_by.id, 0) + total_amount
 
-            for debtor in expense.debtors.all():
-                net_amounts[debtor.id] = (
-                    net_amounts.get(debtor.id, 0) - amount_per_debtor
-                )  # Use User ID
+            amount_per_debtor = (total_amount / len(debtors)).quantize(
+                Decimal("0.01"), rounding=ROUND_DOWN
+            )
+            last_debtor_amount = total_amount - amount_per_debtor * (len(debtors) - 1)
+
+            for i, debtor in enumerate(debtors):
+                if i < len(debtors) - 1:
+                    net_amounts[debtor.id] = net_amounts.get(debtor.id, 0) - amount_per_debtor
+                else:  # last debtor can pay 0.01 more to avoid rounding errors
+                    net_amounts[debtor.id] = net_amounts.get(debtor.id, 0) - last_debtor_amount
 
         balances = list(net_amounts.items())
 
@@ -54,8 +62,8 @@ class Expense(models.Model):
                 {
                     "payer": debtor_id,
                     "receiver": creditor_id,
-                    "amount": transfer_amount,
-                }  # Use User IDs
+                    "amount": "{:.2f}".format(transfer_amount),
+                }
             )
 
             debtors[debtor_index] = (debtor_id, debtor_balance + transfer_amount)
