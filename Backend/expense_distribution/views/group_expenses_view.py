@@ -1,15 +1,14 @@
 from venv import logger
 
-from expense_distribution.serializers import (
-    ExpenseDetailSerializer,
-    ExpensePostSerializer,
-    ExpensesGetSerializer,
-)
 from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from ..serializers.expense_creator_serializer import ExpenseCreatorSerializer
+from ..serializers.expense_detail_serializer import ExpenseDetailSerializer
+from ..serializers.expenses_get_serializer import ExpensesGetSerializer
 
 
 class GroupExpensesView(APIView):
@@ -55,7 +54,7 @@ class GroupExpensesView(APIView):
             data = request.data.copy()
             data["group"] = group_id
 
-            serializer = ExpensePostSerializer(data=data)
+            serializer = ExpenseCreatorSerializer(data=data)
             if serializer.is_valid():
                 expense = serializer.save()
 

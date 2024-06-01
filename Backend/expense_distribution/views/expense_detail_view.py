@@ -1,12 +1,13 @@
 from venv import logger
 
 from expense_distribution.models import Expense
-from expense_distribution.serializers import ExpenseDetailSerializer
 from groups.models import Group, UserGroup
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from ..serializers.expense_detail_serializer import ExpenseDetailSerializer
 
 
 class ExpenseDetailView(APIView):
