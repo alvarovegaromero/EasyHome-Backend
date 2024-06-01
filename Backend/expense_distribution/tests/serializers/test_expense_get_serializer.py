@@ -7,7 +7,7 @@ from ...serializers.expenses_get_serializer import ExpensesGetSerializer
 
 
 class ExpenseGetSerializerTest(TestCase):
-    def test_expenses_get_serializer(self):
+    def test_expense_get_serializer(self):
         user = User.objects.create_user(
             username="testuser", email="testuser@test.com", password="testpassword"
         )
