@@ -45,3 +45,76 @@ class ExpenseCreatorSerializerTest(TestCase):
         self.assertEqual(list(expense.debtors.all()), [self.user2])
         self.assertEqual(expense.paid_by, self.user1)
         self.assertEqual(expense.group, self.group)
+
+    def test_expense_creator_serializer_without_name(self):
+        data = {
+            "amount": "100.00",
+            "debtors": [self.user2.id],
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(serializer.errors["name"][0], "Name must be provided")
+
+    def test_expense_creator_serializer_without_amount(self):
+        data = {
+            "name": "Test Expense",
+            "debtors": [self.user2.id],
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(serializer.errors["amount"][0], "Amount must be provided")
+
+    def test_expense_creator_serializer_with_amount_less_than_min_value(self):
+        data = {
+            "name": "Test Expense",
+            "amount": "0",
+            "debtors": [self.user2.id],
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(serializer.errors["amount"][0], "Amount must be greater than 0")
+
+        data = {
+            "name": "Test Expense",
+            "amount": "-10",
+            "debtors": [self.user2.id],
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(serializer.errors["amount"][0], "Amount must be greater than 0")
+
+    def test_expense_creator_serializer_without_debtors(self):
+        data = {
+            "name": "Test Expense",
+            "amount": "100.00",
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(serializer.errors["debtors"][0], "Debtors must be provided")
+
+    def test_expense_creator_serializer_without_paid_by(self):
+        data = {
+            "name": "Test Expense",
+            "amount": "100.00",
+            "debtors": [self.user2.id],
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(serializer.errors["paid_by"][0], "Paid_by must be provided")
