@@ -26,6 +26,10 @@ class Expense(models.Model):
         for expense in expenses:
             debtors = list(expense.debtors.all())
             num_debtors = len(debtors)
+
+            if num_debtors == 0:
+                raise ValueError("Expense with id {} has no debtors".format(expense.id))
+
             total_amount = expense.amount
             net_amounts[expense.paid_by.id] = net_amounts.get(expense.paid_by.id, 0) + total_amount
 
