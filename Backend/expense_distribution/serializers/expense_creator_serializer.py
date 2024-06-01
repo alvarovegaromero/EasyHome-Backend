@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
 from groups.models import Group, UserGroup
 from rest_framework import serializers
@@ -14,8 +16,10 @@ class ExpenseCreatorSerializer(serializers.ModelSerializer):
     amount = serializers.DecimalField(
         max_digits=7,
         decimal_places=2,
+        min_value=Decimal("0.01"),  # This ensures that the amount is greater than 0
         error_messages={
             "required": "Amount must be provided",
+            "min_value": "Amount must be greater than 0",
         },
     )
     debtors = serializers.ListField(
