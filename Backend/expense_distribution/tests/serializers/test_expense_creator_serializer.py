@@ -118,3 +118,41 @@ class ExpenseCreatorSerializerTest(TestCase):
         serializer = ExpenseCreatorSerializer(data=data)
         self.assertFalse(serializer.is_valid())
         self.assertEqual(serializer.errors["paid_by"][0], "Paid_by must be provided")
+
+    def test_expense_creator_serializer_with_non_member_payer(self):
+        non_member = User.objects.create_user(
+            username="nonmember", email="nonmember@test.com", password="testpassword"
+        )
+
+        data = {
+            "name": "Test Expense",
+            "amount": "100.00",
+            "debtors": [self.user2.id],
+            "paid_by": non_member.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(
+            serializer.errors["non_field_errors"][0], "Payer must be a member of the group"
+        )
+
+    def test_expense_creator_serializer_with_non_member_debtor(self):
+        non_member = User.objects.create_user(
+            username="nonmember", email="nonmember@test.com", password="testpassword"
+        )
+
+        data = {
+            "name": "Test Expense",
+            "amount": "100.00",
+            "debtors": [non_member.id],
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(
+            serializer.errors["non_field_errors"][0], "All debtors must be members of the group"
+        )
