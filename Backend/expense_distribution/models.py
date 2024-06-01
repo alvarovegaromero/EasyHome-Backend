@@ -25,22 +25,24 @@ class Expense(models.Model):
         net_amounts = {}
         for expense in expenses:
             debtors = list(expense.debtors.all())
+            num_debtors = len(debtors)
             total_amount = expense.amount
             net_amounts[expense.paid_by.id] = net_amounts.get(expense.paid_by.id, 0) + total_amount
 
-            amount_per_debtor = (total_amount / len(debtors)).quantize(
+            amount_per_debtor = (total_amount / num_debtors).quantize(
                 Decimal("0.01"), rounding=ROUND_DOWN
             )
-            last_debtor_amount = total_amount - amount_per_debtor * (len(debtors) - 1)
 
             for i, debtor in enumerate(debtors):
-                if i < len(debtors) - 1:
+                if i < num_debtors - 1:
                     net_amounts[debtor.id] = net_amounts.get(debtor.id, 0) - amount_per_debtor
-                else:  # last debtor can pay 0.01 more to avoid rounding errors
+                else:  # last debtor what's remaining. Can pay 0.01 more to avoid rounding errors
+                    last_debtor_amount = total_amount - amount_per_debtor * (num_debtors - 1)
                     net_amounts[debtor.id] = net_amounts.get(debtor.id, 0) - last_debtor_amount
 
         balances = list(net_amounts.items())
 
+        # Sort balances in ascending order. If balance is negative, user is a debtor and vice versa
         debtors = sorted(
             [(i, balance) for i, balance in balances if balance < 0], key=lambda x: x[1]
         )
