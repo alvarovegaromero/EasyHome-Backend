@@ -74,6 +74,30 @@ class GroupExpensesViewTest(TestCase):
         expense_serializer = ExpenseDetailSerializer(expense)
         self.assertEqual(response.data["expense"], expense_serializer.data)
 
+    def test_post_expense_with_date(self):
+        data = {
+            "name": "Test Expense 2",
+            "amount": 200.00,
+            "paid_by": self.user1.id,
+            "debtors": [self.user2.id],
+            "date_paid": "2023-08-29T00:00:00.000001Z",  # django don't save ms if are 0
+        }
+
+        response = self.client.post(
+            f"/api/expense_distribution/{self.group.id}/expenses", data=data
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Decimal(response.data["expense"]["amount"]), Decimal(data["amount"]))
+        self.assertEqual(response.data["expense"]["paid_by"]["id"], data["paid_by"])
+        debtors_ids = [debtor["id"] for debtor in response.data["expense"]["debtors"]]
+        self.assertEqual(debtors_ids, data["debtors"])
+        self.assertEqual(response.data["expense"]["date_paid"], data["date_paid"])
+
+        expense = Expense.objects.get(name=data["name"])
+        expense_serializer = ExpenseDetailSerializer(expense)
+        self.assertEqual(response.data["expense"], expense_serializer.data)
+
     def test_post_expense_no_group(self):
         data = {
             "name": "Test Expense 2",
