@@ -1,4 +1,5 @@
 import string
+from datetime import date
 from decimal import Decimal
 
 from django.contrib.auth.models import User
@@ -30,6 +31,7 @@ class GroupModelTest(TestCase):
             amount=100.20,
             paid_by=self.user1,
             group=self.group,
+            date_paid=date(2023, 1, 1),
         )
         self.expense1.debtors.set([self.user1, self.user2])
 
@@ -70,6 +72,8 @@ class GroupModelTest(TestCase):
     def test_get_expenses(self):
         expenses = self.group.get_expenses()
         self.assertEqual(len(expenses), 2)
+
+        self.assertEqual(expenses[0].id, self.expense2.id)  # order_by('-date_paid') in get_expenses
 
         for expense in expenses:
             if expense.id == self.expense1.id:

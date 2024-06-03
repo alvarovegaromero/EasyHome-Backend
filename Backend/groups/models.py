@@ -47,7 +47,7 @@ class Group(models.Model):
         ]
 
     def get_expenses(self):
-        return self.expenses.all()
+        return self.expenses.all().order_by("-date_paid")
 
     def __str__(self):
         return self.name
