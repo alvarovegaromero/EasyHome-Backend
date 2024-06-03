@@ -58,6 +58,7 @@ class ExpenseDetailSerializerTest(TestCase):
                 "debtors": [{"id": user2.id, "username": user2.username}],
                 "paid_by": {"id": user1.id, "username": user1.username},
                 "group": group.id,
+                "date_added": expense.date_added.strftime("%Y-%m-%d"),
             },
         )
 
@@ -77,5 +78,6 @@ class ExpenseDetailSerializerTest(TestCase):
                 ],
                 "paid_by": {"id": user2.id, "username": user2.username},
                 "group": group.id,
+                "date_added": expense2.date_added.strftime("%Y-%m-%d"),
             },
         )
