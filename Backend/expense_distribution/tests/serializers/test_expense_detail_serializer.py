@@ -54,7 +54,7 @@ class ExpenseDetailSerializerTest(TestCase):
                 "id": expense.id,
                 "name": "Test Expense",
                 "amount": "100.00",
-                "date_paid": expense.date_paid.isoformat().replace("+00:00", "Z"),
+                "date_paid": expense.date_paid.strftime("%Y-%m-%d"),
                 "debtors": [{"id": user2.id, "username": user2.username}],
                 "paid_by": {"id": user1.id, "username": user1.username},
                 "group": group.id,
@@ -69,7 +69,7 @@ class ExpenseDetailSerializerTest(TestCase):
                 "id": expense2.id,
                 "name": "Test Expense 2",
                 "amount": "200.00",
-                "date_paid": expense2.date_paid.isoformat().replace("+00:00", "Z"),
+                "date_paid": expense2.date_paid.strftime("%Y-%m-%d"),
                 "debtors": [
                     {"id": user1.id, "username": user1.username},
                     {"id": user2.id, "username": user2.username},

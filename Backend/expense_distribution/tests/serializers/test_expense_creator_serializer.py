@@ -46,6 +46,28 @@ class ExpenseCreatorSerializerTest(TestCase):
         self.assertEqual(expense.paid_by, self.user1)
         self.assertEqual(expense.group, self.group)
 
+    def test_expense_creator_serializer_with_date(self):
+        data = {
+            "name": "Test Expense",
+            "amount": "100.00",
+            "debtors": [self.user2.id],
+            "paid_by": self.user1.id,
+            "group": self.group.id,
+            "date_paid": "2021-01-01",
+        }
+
+        serializer = ExpenseCreatorSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+        expense = serializer.save()
+
+        self.assertEqual(expense.name, "Test Expense")
+        self.assertEqual(expense.amount, Decimal("100.00"))
+        self.assertEqual(list(expense.debtors.all()), [self.user2])
+        self.assertEqual(expense.paid_by, self.user1)
+        self.assertEqual(expense.group, self.group)
+        self.assertEqual(expense.date_paid.strftime("%Y-%m-%d"), "2021-01-01")
+
     def test_expense_creator_serializer_without_name(self):
         data = {
             "amount": "100.00",

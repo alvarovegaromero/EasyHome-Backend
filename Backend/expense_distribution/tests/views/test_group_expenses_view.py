@@ -80,7 +80,7 @@ class GroupExpensesViewTest(TestCase):
             "amount": 200.00,
             "paid_by": self.user1.id,
             "debtors": [self.user2.id],
-            "date_paid": "2023-08-29T00:00:00.000001Z",  # django don't save ms if are 0
+            "date_paid": "2023-08-29",
         }
 
         response = self.client.post(

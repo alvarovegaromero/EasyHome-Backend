@@ -6,6 +6,7 @@ from ..models import Expense
 class ExpenseDetailSerializer(serializers.ModelSerializer):
     debtors = serializers.SerializerMethodField()
     paid_by = serializers.SerializerMethodField()
+    date_paid = serializers.SerializerMethodField()
 
     class Meta:
         model = Expense
@@ -16,3 +17,6 @@ class ExpenseDetailSerializer(serializers.ModelSerializer):
 
     def get_paid_by(self, obj):
         return {"id": obj.paid_by.id, "username": obj.paid_by.username}
+
+    def get_date_paid(self, obj):
+        return obj.date_paid.strftime("%Y-%m-%d")

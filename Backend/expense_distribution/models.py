@@ -12,7 +12,7 @@ class Expense(models.Model):
     paid_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="paid_expenses")
     debtors = models.ManyToManyField(User, related_name="debtors")
     date_added = models.DateTimeField(auto_now_add=True)  # can't be changed
-    date_paid = models.DateTimeField(default=timezone.now)  # can be changed in the future
+    date_paid = models.DateField(default=timezone.now)  # can be changed in the future
 
     @staticmethod
     def getMinimumSettlements(expenses):

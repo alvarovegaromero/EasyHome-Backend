@@ -34,7 +34,7 @@ class ExpenseCreatorSerializer(serializers.ModelSerializer):
         }
     )
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
-    date_paid = serializers.DateTimeField(input_formats=["%Y-%m-%dT%H:%M:%S.%fZ"], required=False)
+    date_paid = serializers.DateField(input_formats=["%Y-%m-%d"], required=False)
 
     class Meta:
         model = Expense
