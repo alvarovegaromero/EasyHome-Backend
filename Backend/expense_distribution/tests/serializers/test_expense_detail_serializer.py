@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from groups.models import Group, UserGroup
@@ -35,6 +37,7 @@ class ExpenseDetailSerializerTest(TestCase):
             amount=100.00,
             paid_by=user1,
             group=group,
+            date_paid=datetime.strptime("2021-01-01", "%Y-%m-%d").date(),
         )
         expense.debtors.add(user2)
 
@@ -54,7 +57,7 @@ class ExpenseDetailSerializerTest(TestCase):
                 "id": expense.id,
                 "name": "Test Expense",
                 "amount": "100.00",
-                "date_paid": expense.date_paid.strftime("%Y-%m-%d"),
+                "date_paid": "2021-01-01",
                 "debtors": [{"id": user2.id, "username": user2.username}],
                 "paid_by": {"id": user1.id, "username": user1.username},
                 "group": group.id,
