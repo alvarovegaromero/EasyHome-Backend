@@ -56,14 +56,14 @@ class ExpensesGetSerializerTest(TestCase):
                     "name": "Test Expense",
                     "amount": "100.00",
                     "date_paid": expense.date_paid.strftime("%Y-%m-%d"),
-                    "paid_by_username": "testuser1",
+                    "paid_by": {"id": user1.id, "username": user1.username},
                 },
                 {
                     "id": expense2.id,
                     "name": "Test Expense 2",
                     "amount": "200.00",
                     "date_paid": expense2.date_paid.strftime("%Y-%m-%d"),
-                    "paid_by_username": "testuser2",
+                    "paid_by": {"id": user2.id, "username": user2.username},
                 },
             ],
         )
