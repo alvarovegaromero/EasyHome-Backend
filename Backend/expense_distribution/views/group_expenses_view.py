@@ -61,7 +61,7 @@ class GroupExpensesView(APIView):
                 expense_serializer = ExpenseDetailSerializer(expense)
 
                 return Response(
-                    {"expense": expense_serializer.data},
+                    expense_serializer.data,
                     status=status.HTTP_201_CREATED,
                 )
 

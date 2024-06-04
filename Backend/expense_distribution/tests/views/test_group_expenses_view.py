@@ -65,14 +65,14 @@ class GroupExpensesViewTest(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Decimal(response.data["expense"]["amount"]), Decimal(data["amount"]))
-        self.assertEqual(response.data["expense"]["paid_by"]["id"], data["paid_by"])
-        debtors_ids = [debtor["id"] for debtor in response.data["expense"]["debtors"]]
+        self.assertEqual(Decimal(response.data["amount"]), Decimal(data["amount"]))
+        self.assertEqual(response.data["paid_by"]["id"], data["paid_by"])
+        debtors_ids = [debtor["id"] for debtor in response.data["debtors"]]
         self.assertEqual(debtors_ids, data["debtors"])
 
         expense = Expense.objects.get(name=data["name"])
         expense_serializer = ExpenseDetailSerializer(expense)
-        self.assertEqual(response.data["expense"], expense_serializer.data)
+        self.assertEqual(response.data, expense_serializer.data)
 
     def test_post_expense_with_date(self):
         data = {
@@ -88,15 +88,15 @@ class GroupExpensesViewTest(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Decimal(response.data["expense"]["amount"]), Decimal(data["amount"]))
-        self.assertEqual(response.data["expense"]["paid_by"]["id"], data["paid_by"])
-        debtors_ids = [debtor["id"] for debtor in response.data["expense"]["debtors"]]
+        self.assertEqual(Decimal(response.data["amount"]), Decimal(data["amount"]))
+        self.assertEqual(response.data["paid_by"]["id"], data["paid_by"])
+        debtors_ids = [debtor["id"] for debtor in response.data["debtors"]]
         self.assertEqual(debtors_ids, data["debtors"])
-        self.assertEqual(response.data["expense"]["date_paid"], data["date_paid"])
+        self.assertEqual(response.data["date_paid"], data["date_paid"])
 
         expense = Expense.objects.get(name=data["name"])
         expense_serializer = ExpenseDetailSerializer(expense)
-        self.assertEqual(response.data["expense"], expense_serializer.data)
+        self.assertEqual(response.data, expense_serializer.data)
 
     def test_post_expense_no_group(self):
         data = {
