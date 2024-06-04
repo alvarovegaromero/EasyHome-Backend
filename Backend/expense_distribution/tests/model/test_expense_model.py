@@ -50,10 +50,20 @@ class ExpenseModelTest(TestCase):
 
         self.assertEqual(len(transactions), 2)
         self.assertIn(
-            {"payer": self.user2.id, "receiver": self.user1.id, "amount": "100.00"}, transactions
+            {
+                "payer": {"id": self.user2.id, "username": self.user2.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "100.00",
+            },
+            transactions,
         )
         self.assertIn(
-            {"payer": self.user3.id, "receiver": self.user1.id, "amount": "100.00"}, transactions
+            {
+                "payer": {"id": self.user3.id, "username": self.user3.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "100.00",
+            },
+            transactions,
         )
 
     def test_get_minimum_settlements_with_one_expense_and_one_debtor(self):
@@ -70,7 +80,12 @@ class ExpenseModelTest(TestCase):
 
         self.assertEqual(len(transactions), 1)
         self.assertIn(
-            {"payer": self.user2.id, "receiver": self.user1.id, "amount": "300.00"}, transactions
+            {
+                "payer": {"id": self.user2.id, "username": self.user2.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "300.00",
+            },
+            transactions,
         )
 
     def test_get_minimum_settlements_with_multiple_expenses_and_multiple_debtors(self):
@@ -95,10 +110,20 @@ class ExpenseModelTest(TestCase):
 
         self.assertEqual(len(transactions), 2)
         self.assertIn(
-            {"payer": self.user3.id, "receiver": self.user1.id, "amount": "200.00"}, transactions
+            {
+                "payer": {"id": self.user3.id, "username": self.user3.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "200.00",
+            },
+            transactions,
         )
         self.assertIn(
-            {"payer": self.user3.id, "receiver": self.user2.id, "amount": "50.00"}, transactions
+            {
+                "payer": {"id": self.user3.id, "username": self.user3.username},
+                "receiver": {"id": self.user2.id, "username": self.user2.username},
+                "amount": "50.00",
+            },
+            transactions,
         )
 
     def test_get_minimum_settlements_with_not_perfect_division(self):
@@ -115,13 +140,28 @@ class ExpenseModelTest(TestCase):
 
         self.assertEqual(len(transactions), 3)
         self.assertIn(
-            {"payer": self.user2.id, "receiver": self.user1.id, "amount": "33.33"}, transactions
+            {
+                "payer": {"id": self.user2.id, "username": self.user2.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "33.33",
+            },
+            transactions,
         )
         self.assertIn(
-            {"payer": self.user3.id, "receiver": self.user1.id, "amount": "33.33"}, transactions
+            {
+                "payer": {"id": self.user3.id, "username": self.user3.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "33.33",
+            },
+            transactions,
         )
         self.assertIn(
-            {"payer": self.user4.id, "receiver": self.user1.id, "amount": "33.34"}, transactions
+            {
+                "payer": {"id": self.user4.id, "username": self.user4.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "33.34",
+            },
+            transactions,
         )
 
     def test_get_minimum_settlements_with_multiple_expenses_and_multiple_debtors_and_creditors(
@@ -156,10 +196,20 @@ class ExpenseModelTest(TestCase):
 
         self.assertEqual(len(transactions), 2)
         self.assertIn(
-            {"payer": self.user3.id, "receiver": self.user1.id, "amount": "100.01"}, transactions
+            {
+                "payer": {"id": self.user3.id, "username": self.user3.username},
+                "receiver": {"id": self.user1.id, "username": self.user1.username},
+                "amount": "100.01",
+            },
+            transactions,
         )
         self.assertIn(
-            {"payer": self.user3.id, "receiver": self.user2.id, "amount": "0.01"}, transactions
+            {
+                "payer": {"id": self.user3.id, "username": self.user3.username},
+                "receiver": {"id": self.user2.id, "username": self.user2.username},
+                "amount": "0.01",
+            },
+            transactions,
         )
 
     def test_with_single_expense_with_same_payer_and_debtor(self):
@@ -224,5 +274,10 @@ class ExpenseModelTest(TestCase):
 
         self.assertEqual(len(transactions), 1)
         self.assertIn(
-            {"payer": self.user1.id, "receiver": self.user2.id, "amount": "100.00"}, transactions
+            {
+                "payer": {"id": self.user1.id, "username": self.user1.username},
+                "receiver": {"id": self.user2.id, "username": self.user2.username},
+                "amount": "100.00",
+            },
+            transactions,
         )

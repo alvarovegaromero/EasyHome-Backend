@@ -66,8 +66,14 @@ class Expense(models.Model):
 
             transactions.append(
                 {
-                    "payer": debtor_id,
-                    "receiver": creditor_id,
+                    "payer": {
+                        "id": debtor_id,
+                        "username": User.objects.get(id=debtor_id).username,
+                    },
+                    "receiver": {
+                        "id": creditor_id,
+                        "username": User.objects.get(id=creditor_id).username,
+                    },
                     "amount": "{:.2f}".format(transfer_amount),
                 }
             )
