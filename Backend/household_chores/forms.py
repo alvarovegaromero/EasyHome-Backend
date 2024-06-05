@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from groups.models import UserGroup
-from household_chores.models import SelectableTask, Task
+from household_chores.models import AssignableTask, Task
 
 
 class TaskChoiceField(forms.ModelChoiceField):
@@ -10,7 +10,7 @@ class TaskChoiceField(forms.ModelChoiceField):
         return f"{obj.title} (Group: {obj.group.name}, Group ID: {obj.group.id})"
 
 
-class SelectableTaskForm(forms.ModelForm):
+class AssignableTaskForm(forms.ModelForm):
     task = TaskChoiceField(queryset=Task.objects.all())
 
     def clean(self):
@@ -21,7 +21,7 @@ class SelectableTaskForm(forms.ModelForm):
         if task:
             if self.instance.id:  # edit mode - exclude current task
                 if (
-                    SelectableTask.objects.filter(
+                    AssignableTask.objects.filter(
                         task=task, date__gte=timezone.now() - timezone.timedelta(days=1)
                     )
                     .exclude(id=self.instance.id)
@@ -32,7 +32,7 @@ class SelectableTaskForm(forms.ModelForm):
                         in a 24 hour period, regardless of the user."""
                     )
             else:  # create mode
-                if SelectableTask.objects.filter(
+                if AssignableTask.objects.filter(
                     task=task, date__gte=timezone.now() - timezone.timedelta(days=1)
                 ).exists():
                     raise ValidationError(
@@ -51,5 +51,5 @@ class SelectableTaskForm(forms.ModelForm):
         return cleaned_data
 
     class Meta:
-        model = SelectableTask
+        model = AssignableTask
         fields = "__all__"

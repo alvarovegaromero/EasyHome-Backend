@@ -7,7 +7,7 @@ class Task(models.Model):
     group = models.ForeignKey("groups.Group", on_delete=models.CASCADE, related_name="tasks")
 
 
-class SelectableTask(models.Model):
+class AssignableTask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="selectable_tasks")
     assigned_user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tasks"

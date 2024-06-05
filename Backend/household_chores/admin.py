@@ -1,6 +1,6 @@
 from django.contrib import admin
-from household_chores.forms import SelectableTaskForm
-from household_chores.models import SelectableTask, Task
+from household_chores.forms import AssignableTaskForm
+from household_chores.models import AssignableTask, Task
 
 
 class TaskAdmin(admin.ModelAdmin):
@@ -12,8 +12,8 @@ class TaskAdmin(admin.ModelAdmin):
     group_name.short_description = "Group Name"
 
 
-class SelectableTaskAdmin(admin.ModelAdmin):
-    form = SelectableTaskForm
+class AssignableTaskAdmin(admin.ModelAdmin):
+    form = AssignableTaskForm
     list_display = ("task_title", "group_id", "group_name", "assigned_user", "is_completed", "date")
 
     def task_title(self, obj):
@@ -33,4 +33,4 @@ class SelectableTaskAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Task, TaskAdmin)
-admin.site.register(SelectableTask, SelectableTaskAdmin)
+admin.site.register(AssignableTask, AssignableTaskAdmin)
