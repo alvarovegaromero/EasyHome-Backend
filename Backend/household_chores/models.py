@@ -6,13 +6,6 @@ class Task(models.Model):
     title = models.CharField(max_length=50)
     group = models.ForeignKey("groups.Group", on_delete=models.CASCADE, related_name="tasks")
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "group": self.group.id,
-        }
-
 
 class AssignableTask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="selectable_tasks")
