@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..permissions.is_group_owner import IsGroupOwner
+from ..serializers.task_serializer import TaskSerializer
 
 
 class TaskRetrieveUpdateDeleteAPIView(APIView):
@@ -23,17 +24,18 @@ class TaskRetrieveUpdateDeleteAPIView(APIView):
                 return Response(
                     {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
                 )
+
+            task.title = request.data["title"]
+            task.save()
+
+            return Response(TaskSerializer(task).data, status=status.HTTP_200_OK)
+
         except Exception as e:
             logger.error("An error occurred during task modification: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
-        task.title = request.data["title"]
-        task.save()
-
-        return Response(task.to_dict(), status=status.HTTP_200_OK)
 
     def delete(self, request, group_id, task_id):
         try:

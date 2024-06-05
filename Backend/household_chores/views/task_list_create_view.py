@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..permissions.is_group_owner import IsGroupOwner
+from ..serializers.task_serializer import TaskSerializer
 
 
 class TaskListCreateAPIView(APIView):
@@ -16,9 +17,9 @@ class TaskListCreateAPIView(APIView):
         try:
             tasks = Task.objects.filter(group_id=group_id)
 
-            tasks_data = [task.to_dict() for task in tasks]
+            serializer = TaskSerializer(tasks, many=True)
 
-            return Response(tasks_data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
             logger.error("An error occurred during tasks retrieval: %s" % str(e))
@@ -36,7 +37,7 @@ class TaskListCreateAPIView(APIView):
 
             task = Task.objects.create(title=request.data["title"], group_id=group_id)
 
-            return Response(task.to_dict(), status=status.HTTP_201_CREATED)
+            return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             logger.error("An error occurred during task creation: %s" % str(e))
