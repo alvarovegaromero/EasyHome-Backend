@@ -17,7 +17,8 @@ class AssignableTasksInRangeAPIView(APIView):
     def get(self, request, group_id):
         start_date = request.query_params.get("start_date")
         end_date = request.query_params.get("end_date")
-        is_completed = request.query_params.get("is_completed")
+        is_completed = request.query_params.get("is_completed")  # Optional
+        user_id = request.query_params.get("user_id")  # Optional
 
         if not start_date or not end_date:
             return Response(
@@ -45,6 +46,14 @@ class AssignableTasksInRangeAPIView(APIView):
 
         if is_completed is not None:
             filters["is_completed"] = is_completed.lower() == "true"
+
+        if user_id is not None:
+            if is_completed is False:
+                return Response(
+                    {"error": "'is_completed' can not be set to false when 'user_id' is provided."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            filters["assigned_user_id"] = user_id
 
         tasks = AssignableTask.objects.filter(**filters)
 
