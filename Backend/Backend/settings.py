@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "groups",
     "shared_board",
     "expense_distribution",
+    "household_chores",
 ]
 
 REST_FRAMEWORK = {
