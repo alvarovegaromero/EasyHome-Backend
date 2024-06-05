@@ -22,7 +22,7 @@ class TaskRetrieveUpdateDeleteAPIView(APIView):
             return Response(task.to_dict(), status=status.HTTP_200_OK)
 
         except Exception as e:
-            logger.error("An error occurred during expense retrieval: %s" % str(e))
+            logger.error("An error occurred during task retrieval: %s" % str(e))
             return Response(
                 {"error": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -32,4 +32,18 @@ class TaskRetrieveUpdateDeleteAPIView(APIView):
         pass
 
     def delete(self, request, group_id, task_id):
-        pass
+        try:
+            try:
+                task = Task.objects.get(id=task_id, group_id=group_id)
+            except Task.DoesNotExist:
+                return Response({"error": "Task wasn't found"}, status=status.HTTP_404_NOT_FOUND)
+
+            task.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except Exception as e:
+            logger.error("An error occurred during task deletion: %s" % str(e))
+            return Response(
+                {"error": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
