@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
+from groups.models import Group
 from rest_framework.permissions import BasePermission
-
-from ...groups.models import Group
 
 
 class IsGroupOwner(BasePermission):
