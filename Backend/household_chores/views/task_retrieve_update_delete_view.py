@@ -29,7 +29,20 @@ class TaskRetrieveUpdateDeleteAPIView(APIView):
             )
 
     def put(self, request, group_id, task_id):
-        pass
+        try:
+            task = Task.objects.get(id=task_id, group_id=group_id)
+        except Task.DoesNotExist:
+            return Response({"error": "Task wasn't found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if "title" not in request.data:
+            return Response(
+                {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        task.title = request.data["title"]
+        task.save()
+
+        return Response(task.to_dict(), status=status.HTTP_200_OK)
 
     def delete(self, request, group_id, task_id):
         try:
