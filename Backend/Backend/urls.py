@@ -21,4 +21,9 @@ urlpatterns = [
         include("expense_distribution.urls"),
         name="expense_distribution",
     ),
+    path(
+        "api/household_chores/",
+        include("household_chores.urls"),
+        name="household_chores",
+    ),
 ]
