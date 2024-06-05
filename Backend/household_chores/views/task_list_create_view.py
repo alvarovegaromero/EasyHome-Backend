@@ -1,4 +1,9 @@
+from venv import logger
+
+from household_chores.models import Task
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..permissions.is_group_owner import IsGroupOwner
@@ -8,7 +13,34 @@ class TaskListCreateAPIView(APIView):
     permission_classes = (IsAuthenticated, IsGroupOwner)
 
     def get(self, request, group_id):
-        pass
+        try:
+            tasks = Task.objects.filter(group_id=group_id)
+
+            tasks_data = [task.to_dict() for task in tasks]
+
+            return Response(tasks_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.error("An error occurred during tasks retrieval: %s" % str(e))
+            return Response(
+                {"error": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     def post(self, request, group_id):
-        pass
+        try:
+            if "title" not in request.data:
+                return Response(
+                    {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+            task = Task.objects.create(title=request.data["title"], group_id=group_id)
+
+            return Response(task.to_dict(), status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            logger.error("An error occurred during task creation: %s" % str(e))
+            return Response(
+                {"error": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
