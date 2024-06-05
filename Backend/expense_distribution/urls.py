@@ -7,7 +7,7 @@ from .views.group_settlement_view import GroupSettlementView
 urlpatterns = [
     path("<str:group_id>/expenses", GroupExpensesView.as_view(), name="group_expenses"),
     path(
-        "<str:group_id>/expenses/<int:expense_id>",
+        "<str:group_id>/expenses/<str:expense_id>",
         ExpenseDetailView.as_view(),
         name="expense_detail",
     ),
