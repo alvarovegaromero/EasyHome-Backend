@@ -1,5 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
+
+def get_default_date():
+    return timezone.now().date()
 
 
 class Task(models.Model):
@@ -13,4 +18,4 @@ class AssignableTask(models.Model):
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tasks"
     )
     is_completed = models.BooleanField(default=False)
-    date = models.DateTimeField(auto_now_add=True)  # can't be changed
+    date = models.DateField(default=get_default_date)
