@@ -4,7 +4,7 @@ from household_chores.models import AssignableTask, Task
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("title", "group_name", "group_id")
+    list_display = ("title", "id", "group_name", "group_id")
 
     def group_name(self, obj):
         return obj.group.name
@@ -14,7 +14,15 @@ class TaskAdmin(admin.ModelAdmin):
 
 class AssignableTaskAdmin(admin.ModelAdmin):
     form = AssignableTaskForm
-    list_display = ("task_title", "group_id", "group_name", "assigned_user", "is_completed", "date")
+    list_display = (
+        "task_title",
+        "id",
+        "group_id",
+        "group_name",
+        "assigned_user",
+        "is_completed",
+        "date",
+    )
 
     def task_title(self, obj):
         return obj.task.title
