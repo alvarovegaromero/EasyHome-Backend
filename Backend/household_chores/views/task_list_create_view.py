@@ -30,7 +30,7 @@ class TaskListCreateAPIView(APIView):
 
     def post(self, request, group_id):
         try:
-            if "title" not in request.data:
+            if "title" not in request.data or request.data["title"] == "":
                 return Response(
                     {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
                 )
