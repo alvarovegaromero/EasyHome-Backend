@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 from groups.models import UserGroup
 from household_chores.models import AssignableTask, Task
 
@@ -18,12 +17,11 @@ class AssignableTaskForm(forms.ModelForm):
         task = cleaned_data.get("task")
         assigned_user = cleaned_data.get("assigned_user")
         is_completed = cleaned_data.get("is_completed")
+        date = cleaned_data.get("date")
         if task:
             if self.instance.id:  # edit mode - exclude current task
                 if (
-                    AssignableTask.objects.filter(
-                        task=task, date__gte=timezone.now() - timezone.timedelta(days=1)
-                    )
+                    AssignableTask.objects.filter(task=task, date__exact=date)
                     .exclude(id=self.instance.id)
                     .exists()
                 ):
@@ -32,12 +30,10 @@ class AssignableTaskForm(forms.ModelForm):
                         in a 24 hour period, regardless of the user."""
                     )
             else:  # create mode
-                if AssignableTask.objects.filter(
-                    task=task, date__gte=timezone.now() - timezone.timedelta(days=1)
-                ).exists():
+                if AssignableTask.objects.filter(task=task, date__exact=date).exists():
                     raise ValidationError(
                         """The same task cannot be assigned more than once
-                        in a 24 hour period, regardless of the user."""
+                        in the same day, regardless of the user."""
                     )
             if assigned_user:
                 if not UserGroup.is_member(assigned_user, task.group):

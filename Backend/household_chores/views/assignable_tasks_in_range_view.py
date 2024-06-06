@@ -1,4 +1,3 @@
-from datetime import timedelta
 from venv import logger
 
 from django.utils.dateparse import parse_date
@@ -30,9 +29,6 @@ class AssignableTasksInRangeAPIView(APIView):
 
             start_date = parse_date(start_date)
             end_date = parse_date(end_date)
-            end_date = (
-                end_date + timedelta(days=1) - timedelta(seconds=1)
-            )  # Set end_date to 23:59:59
 
             if not start_date or not end_date:
                 return Response(
