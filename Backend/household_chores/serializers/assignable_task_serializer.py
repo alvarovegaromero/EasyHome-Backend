@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from household_chores.models import AssignableTask
 from rest_framework import serializers
 
+from .task_serializer import TaskSerializer
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AssignableTaskSerializer(serializers.ModelSerializer):
     assigned_user = UserSerializer(read_only=True)
+    task = TaskSerializer(read_only=True)  # Use the existing TaskSerializer here
 
     class Meta:
         model = AssignableTask
