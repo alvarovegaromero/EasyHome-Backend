@@ -39,7 +39,11 @@ class GroupJoinAPIView(APIView):
             UserGroup.objects.create(user=request.user, group=group)
 
             return Response(
-                {"success": "You have joined the group successfully.", "id": group.id},
+                {
+                    "success": "You have joined the group successfully.",
+                    "id": group.id,
+                    "owner": group.owner.username,
+                },
                 status=status.HTTP_200_OK,
             )
 

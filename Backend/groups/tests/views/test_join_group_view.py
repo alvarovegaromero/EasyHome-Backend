@@ -37,6 +37,7 @@ class GroupJoinAPIViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["success"], "You have joined the group successfully.")
         self.assertEqual(response.data["id"], self.group.id)
+        self.assertEqual(response.data["owner"], self.owner.username)
 
     def test_join_group_without_code(self):
         response = self.client.post(self.url)

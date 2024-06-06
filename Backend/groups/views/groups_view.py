@@ -14,7 +14,11 @@ class GroupsAPIView(APIView):
         try:
             user_groups = UserGroup.objects.filter(user=request.user)
             group_data = [
-                {"id": user_group.group.id, "name": user_group.group.name}
+                {
+                    "id": user_group.group.id,
+                    "name": user_group.group.name,
+                    "owner": user_group.group.owner.username,
+                }
                 for user_group in user_groups
             ]
 
