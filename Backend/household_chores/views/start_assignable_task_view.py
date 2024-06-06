@@ -1,6 +1,6 @@
 from venv import logger
 
-from household_chores.models import AssignableTask
+from household_chores.models import AssignableTask, Task
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -21,13 +21,16 @@ class StartAssignableTasksAPIView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            tasks = AssignableTask.objects.filter(task__group_id=group_id)
+            tasks = Task.objects.filter(group_id=group_id)
+            print("task")
 
             assignable_tasks = []
             for task in tasks:
                 assignable_task = AssignableTask(task=task)
                 assignable_task.save()
                 assignable_tasks.append(assignable_task)
+
+            print("xd")
 
             serializer = AssignableTaskSerializer(assignable_tasks, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
