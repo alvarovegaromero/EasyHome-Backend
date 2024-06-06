@@ -21,16 +21,19 @@ class StartAssignableTasksAPIView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            if not Task.objects.filter(group_id=group_id).exists():
+                return Response(
+                    {"message": "No tasks found for the group"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
             tasks = Task.objects.filter(group_id=group_id)
-            print("task")
 
             assignable_tasks = []
             for task in tasks:
                 assignable_task = AssignableTask(task=task)
                 assignable_task.save()
                 assignable_tasks.append(assignable_task)
-
-            print("xd")
 
             serializer = AssignableTaskSerializer(assignable_tasks, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
