@@ -17,13 +17,13 @@ class StartAssignableTasksAPIView(APIView):
         try:
             if AssignableTask.objects.filter(task__group_id=group_id).exists():
                 return Response(
-                    {"message": "Assignable tasks already started for the group"},
+                    {"error": "Assignable tasks already started for the group"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
             if not Task.objects.filter(group_id=group_id).exists():
                 return Response(
-                    {"message": "No tasks found for the group"},
+                    {"error": "No tasks found for the group"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
