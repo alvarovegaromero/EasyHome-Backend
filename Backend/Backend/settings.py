@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "shared_board",
     "expense_distribution",
     "household_chores",
+    "shopping_list",
 ]
 
 REST_FRAMEWORK = {
