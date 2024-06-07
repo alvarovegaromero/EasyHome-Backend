@@ -26,4 +26,9 @@ urlpatterns = [
         include("household_chores.urls"),
         name="household_chores",
     ),
+    path(
+        "api/shopping_list/",
+        include("shopping_list.urls"),
+        name="shopping_list",
+    ),
 ]
