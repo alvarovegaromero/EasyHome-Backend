@@ -3,6 +3,7 @@ from django.urls import path
 
 from .views.login.login_view import LoginAPIView
 from .views.logout.logout_view import LogoutAPIView
+from .views.my_info_token_view import MyInfoTokenAPIView
 from .views.profile.profile_view import ProfileAPIView
 from .views.register.register_view import RegisterAPIView
 from .views.reset_password.reset_password_request_view import (
@@ -29,4 +30,5 @@ urlpatterns = [
         ResetPasswordRequestAPIView.as_view(),
         name="reset-password-request",
     ),
+    path("my-info", MyInfoTokenAPIView.as_view(), name="my-info"),
 ]
