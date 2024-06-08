@@ -10,7 +10,7 @@ from ..permissions.is_group_owner import IsGroupOwner
 from ..serializers.task_serializer import TaskSerializer
 
 
-class TaskRetrieveUpdateDeleteAPIView(APIView):
+class TaskUpdateDeleteAPIView(APIView):
     permission_classes = (IsAuthenticated, IsGroupOwner)
 
     def put(self, request, group_id, task_id):
