@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from utils.permissions.is_group_member import IsGroupMember
 
-from ..permissions.is_group_member import IsGroupMember
 from ..serializers.assignable_task_serializer import AssignableTaskSerializer
 
 
