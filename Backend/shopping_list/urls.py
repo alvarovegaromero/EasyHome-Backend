@@ -23,7 +23,7 @@ urlpatterns = [
         "<int:group_id>/products/to_buy", ProductToBuyListAPIView.as_view(), name="products_to_buy"
     ),
     path(
-        "<int:group_id>/products/bought",
+        "<int:group_id>/products/<int:product_id>/bought",
         ProductToBuyMarkAsBoughtAPIView.as_view(),
         name="mark_product_as_bought",
     ),
