@@ -24,6 +24,4 @@ class ProductBought(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="purchases")
     date = models.DateField(default=get_current_date)
     price = models.FloatField()
-    user = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="purchased_products"
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="purchased_products")
