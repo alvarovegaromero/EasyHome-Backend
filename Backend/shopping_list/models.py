@@ -15,7 +15,7 @@ class Product(models.Model):
 
 
 class ProductToBuy(models.Model):
-    product = models.ForeignKey(
+    product = models.OneToOneField(
         Product, on_delete=models.CASCADE, related_name="purchase_intentions"
     )
 
