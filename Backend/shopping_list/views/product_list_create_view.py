@@ -30,7 +30,15 @@ class ProductListCreateAPIView(APIView):
 
     def post(self, request, group_id):
         try:
-            pass
+            if "name" not in request.data or request.data["name"].strip() == "":
+                return Response(
+                    {"error": "The 'name' field is required."}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+            product = Product.objects.create(name=request.data["name"].strip(), group_id=group_id)
+
+            return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+
         except Exception as e:
             logger.error("An error occurred during product creation: %s" % str(e))
             return Response(
