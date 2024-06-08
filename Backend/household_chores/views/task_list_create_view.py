@@ -30,12 +30,12 @@ class TaskListCreateAPIView(APIView):
 
     def post(self, request, group_id):
         try:
-            if "title" not in request.data or request.data["title"] == "":
+            if "title" not in request.data or request.data["title"].strip() == "":
                 return Response(
                     {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
                 )
 
-            task = Task.objects.create(title=request.data["title"], group_id=group_id)
+            task = Task.objects.create(title=request.data["title"].strip(), group_id=group_id)
 
             return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
 
