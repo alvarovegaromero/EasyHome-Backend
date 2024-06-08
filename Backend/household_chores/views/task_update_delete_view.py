@@ -15,17 +15,17 @@ class TaskUpdateDeleteAPIView(APIView):
 
     def put(self, request, group_id, task_id):
         try:
+            if "title" not in request.data or request.data["title"].strip() == "":
+                return Response(
+                    {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
+                )
+
             try:
                 task = Task.objects.get(id=task_id, group_id=group_id)
             except Task.DoesNotExist:
                 return Response({"error": "Task wasn't found"}, status=status.HTTP_404_NOT_FOUND)
 
-            if "title" not in request.data:
-                return Response(
-                    {"error": "The 'title' field is required."}, status=status.HTTP_400_BAD_REQUEST
-                )
-
-            task.title = request.data["title"]
+            task.title = request.data["title"].strip()
             task.save()
 
             return Response(TaskSerializer(task).data, status=status.HTTP_200_OK)
