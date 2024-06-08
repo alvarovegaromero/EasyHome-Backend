@@ -13,6 +13,9 @@ class Product(models.Model):
         "groups.Group", on_delete=models.CASCADE, related_name="group_products"
     )
 
+    def __str__(self):
+        return self.name
+
 
 class ProductToBuy(models.Model):
     product = models.OneToOneField(

@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Product, ProductToBuy
+from .models import Product, ProductBought, ProductToBuy
 
 
 class ProductChoiceField(forms.ModelChoiceField):
@@ -37,3 +37,22 @@ class ProductToBuyForm(forms.ModelForm):
     class Meta:
         model = ProductToBuy
         fields = ["product"]
+
+
+class ProductBoughtForm(forms.ModelForm):
+    product = ProductChoiceField(queryset=Product.objects.filter(purchase_intentions__isnull=False))
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        try:
+            product_to_buy = ProductToBuy.objects.get(product=instance.product)
+            product_to_buy.delete()
+        except ProductToBuy.DoesNotExist:
+            raise ValidationError("There is no active instance referencing this product.")
+
+        return instance
+
+    class Meta:
+        model = ProductBought
+        fields = ["product", "date", "price", "user"]
