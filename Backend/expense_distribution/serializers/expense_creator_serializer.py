@@ -24,9 +24,7 @@ class ExpenseCreatorSerializer(serializers.ModelSerializer):
     )
     debtors = serializers.ListField(
         child=serializers.IntegerField(),
-        error_messages={
-            "required": "Debtors must be provided",
-        },
+        required=False,
     )
     paid_by = serializers.IntegerField(
         error_messages={
@@ -45,7 +43,7 @@ class ExpenseCreatorSerializer(serializers.ModelSerializer):
         Check data is valid before creating the object
         """
 
-        debtors = data.get("debtors")
+        debtors = data.get("debtors", [])
         paid_by = data.get("paid_by")
         group = data.get("group")
 
@@ -77,9 +75,14 @@ class ExpenseCreatorSerializer(serializers.ModelSerializer):
             **({"date_paid": date_paid} if date_paid is not None else {})
         )
 
-        for debtor_id in debtors:
-            debtor = User.objects.get(id=debtor_id)
-            expense.debtors.add(debtor)
+        if debtors:
+            for debtor_id in debtors:
+                debtor = User.objects.get(id=debtor_id)
+                expense.debtors.add(debtor)
+        else:
+            # If no debtors are provided, all group members are considered debtors
+            group_members = UserGroup.objects.filter(group=group).values_list("user", flat=True)
+            expense.debtors.set(group_members)
 
         expense.save()
 
