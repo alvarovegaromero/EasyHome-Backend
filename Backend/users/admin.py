@@ -9,7 +9,17 @@ class UserAdmin(DefaultUserAdmin):
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "reset_password_token", "has_email_verified")
+    list_display = ("user", "user_id", "reset_password_token", "has_email_verified", "last_login")
+
+    def user_id(self, obj):
+        return obj.user.id
+
+    user_id.short_description = "User ID"
+
+    def last_login(self, obj):
+        return obj.user.last_login
+
+    last_login.short_description = "Last Login"
 
 
 admin.site.unregister(User)
