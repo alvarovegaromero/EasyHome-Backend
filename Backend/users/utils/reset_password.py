@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from users.models import UserProfile
@@ -32,14 +31,6 @@ def associate_user_with_token(user, token, token_field):
 
     setattr(user_profile, token_field, token)
     user_profile.save()
-
-
-def get_user_by_email(email):
-    try:
-        user = User.objects.get(email=email)
-        return user
-    except User.DoesNotExist:
-        return None
 
 
 def verify_email_with_token(token):

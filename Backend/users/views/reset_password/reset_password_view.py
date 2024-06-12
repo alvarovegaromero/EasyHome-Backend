@@ -4,10 +4,11 @@ from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from utils.functions.get_user_by_email import get_user_by_email
 
 from Backend.settings import BASE_URL
 
-from ...utils.reset_password import generate_reset_url, get_user_by_email
+from ...utils.reset_password import generate_reset_url
 
 
 class ResetPasswordAPIView(APIView):
