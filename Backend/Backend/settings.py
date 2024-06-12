@@ -46,10 +46,11 @@ CSRF_TRUSTED_ORIGINS = [
     "https://192.168.78.213",
 ]
 
+BASE_URL_LOCAL_NETWORK = "http://localhost:8000"
 BASE_URL_NORMAL_NETWORK = "https://192.168.1.50"
-BASE_URL_HOTSPOT_NETWORK = "https://192.168.78.213"
+BASE_URL_HOTSPOT_NETWORK = "https://192.168.142.213"
 
-BASE_URL = BASE_URL_NORMAL_NETWORK  # Switch when needed
+BASE_URL = BASE_URL_HOTSPOT_NETWORK  # Switch when needed
 
 
 # Application definition
