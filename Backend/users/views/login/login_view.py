@@ -6,6 +6,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ...utils.verify_email import (
+    generate_email_verification_url,
+    send_email_verification_email,
+)
+
 
 class LoginAPIView(APIView):
     def post(self, request):
@@ -21,6 +26,16 @@ class LoginAPIView(APIView):
 
             user = authenticate(username=username, password=password)
             if user is not None:
+                if not user.userprofile.has_email_verified:
+
+                    verification_url = generate_email_verification_url(user)
+                    send_email_verification_email(user, verification_url)
+
+                    return Response(
+                        {"error": "Email verification pending. Verification email re-sent."},
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+
                 login(request, user)
                 token, created = Token.objects.get_or_create(user=user)
                 return Response(
