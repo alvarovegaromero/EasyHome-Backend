@@ -9,7 +9,7 @@ class UserAdmin(DefaultUserAdmin):
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "user_id", "reset_password_token", "has_email_verified", "last_login")
+    list_display = ("user", "user_id", "has_email_verified", "email", "date_joined", "last_login")
 
     def user_id(self, obj):
         return obj.user.id
@@ -20,6 +20,16 @@ class UserProfileAdmin(admin.ModelAdmin):
         return obj.user.last_login
 
     last_login.short_description = "Last Login"
+
+    def email(self, obj):
+        return obj.user.email
+
+    email.short_description = "Email"
+
+    def date_joined(self, obj):
+        return obj.user.date_joined
+
+    date_joined.short_description = "Date Joined"
 
 
 admin.site.unregister(User)
