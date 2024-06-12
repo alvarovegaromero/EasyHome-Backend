@@ -18,7 +18,14 @@ class MyInfoTokenAPIView(APIView):
 
             user = token.user
 
-            return Response({"id": user.id, "username": user.username}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "id": user.id,
+                    "username": user.username,
+                    "is_verified": user.userprofile.has_email_verified,
+                },
+                status=status.HTTP_200_OK,
+            )
 
         except Exception as e:
             logger.error("An error occurred during user information retrieval: %s" % str(e))
