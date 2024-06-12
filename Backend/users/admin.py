@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class UserAdmin(DefaultUserAdmin):
-    list_display = ("username", "id", "email", "first_name", "last_name")
+    list_display = ("username", "id", "email", "first_name", "last_name", "last_login")
 
 
 admin.site.unregister(User)

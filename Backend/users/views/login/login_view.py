@@ -1,6 +1,6 @@
 from venv import logger
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -21,6 +21,7 @@ class LoginAPIView(APIView):
 
             user = authenticate(username=username, password=password)
             if user is not None:
+                login(request, user)
                 token, created = Token.objects.get_or_create(user=user)
                 return Response(
                     {"token": token.key, "username": username, "id": user.id},
