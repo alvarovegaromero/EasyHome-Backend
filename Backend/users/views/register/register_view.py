@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from ...utils.verify_email import (
     generate_email_verification_url,
-    send_verification_email,
+    send_email_verification_email,
 )
 
 
@@ -63,7 +63,7 @@ class RegisterAPIView(APIView):
             )
 
             verification_url = generate_email_verification_url(user)
-            send_verification_email(user, verification_url)
+            send_email_verification_email(user, verification_url)
 
             token, created = Token.objects.get_or_create(user=user)
             return Response(
