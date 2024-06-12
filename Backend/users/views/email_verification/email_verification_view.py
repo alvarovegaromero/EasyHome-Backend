@@ -13,7 +13,7 @@ class EmailVerificationAPIView(APIView):
         is_verified, message = verify_email_with_token(token)
         if is_verified:
             return HttpResponse(
-                f"<h1>{message}</h1> <p> You can go now back to the app <p> ", status=200
+                f"<h1>{message}</h1> <p> You can go now log into the app <p> ", status=200
             )
         else:
             return HttpResponse(f"<h1>{message}</h1>", status=400)
