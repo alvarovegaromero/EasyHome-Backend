@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from Backend.settings import BASE_URL
 
-from .reset_password import generate_reset_url, get_user_by_email
+from ...utils.reset_password import generate_reset_url, get_user_by_email
 
 
 class ResetPasswordAPIView(APIView):

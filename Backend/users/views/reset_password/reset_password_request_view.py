@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .reset_password import reset_password_with_token
+from ...utils.reset_password import reset_password_with_token
 
 
 class ResetPasswordRequestAPIView(APIView):
