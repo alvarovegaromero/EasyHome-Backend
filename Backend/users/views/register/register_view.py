@@ -7,6 +7,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ...utils.verify_email import (
+    generate_email_verification_url,
+    send_verification_email,
+)
+
 
 class RegisterAPIView(APIView):
     def post(self, request):
@@ -56,9 +61,18 @@ class RegisterAPIView(APIView):
                 first_name=first_name,
                 last_name=last_name,
             )
+
+            verification_url = generate_email_verification_url(user)
+            send_verification_email(user, verification_url)
+
             token, created = Token.objects.get_or_create(user=user)
             return Response(
-                {"token": token.key, "username": username, "id": user.id},
+                {
+                    "token": token.key,
+                    "username": username,
+                    "id": user.id,
+                    "is_verified": user.userprofile.has_email_verified,
+                },
                 status=status.HTTP_201_CREATED,
             )
 

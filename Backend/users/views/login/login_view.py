@@ -24,7 +24,12 @@ class LoginAPIView(APIView):
                 login(request, user)
                 token, created = Token.objects.get_or_create(user=user)
                 return Response(
-                    {"token": token.key, "username": username, "id": user.id},
+                    {
+                        "token": token.key,
+                        "username": username,
+                        "id": user.id,
+                        "is_verified": user.userprofile.has_email_verified,
+                    },
                     status=status.HTTP_200_OK,
                 )
             else:
