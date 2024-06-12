@@ -6,26 +6,31 @@ from users.models import UserProfile
 token_generator = PasswordResetTokenGenerator()
 
 
-def generate_reset_password_token(user):
+def generate_token(user):
     return token_generator.make_token(user)
 
 
+def generate_verification_url(user, view_name):
+    token = generate_token(user)
+    associate_user_with_token(user, token, "email_verification_token")
+    verification_url = reverse(view_name) + f"?token={token}"
+    return verification_url
+
+
 def generate_reset_url(user):
-    token = generate_reset_password_token(user)
-
-    associate_user_with_token(user, token)
-
+    token = generate_token(user)
+    associate_user_with_token(user, token, "reset_password_token")
     reset_url = reverse("reset-password-form") + f"?token={token}"
     return reset_url
 
 
-def associate_user_with_token(user, token):
+def associate_user_with_token(user, token, token_field):
     try:
         user_profile = UserProfile.objects.get(user=user)
     except UserProfile.DoesNotExist:
         user_profile = UserProfile.objects.create(user=user)
 
-    user_profile.reset_password_token = token
+    setattr(user_profile, token_field, token)
     user_profile.save()
 
 
@@ -35,6 +40,21 @@ def get_user_by_email(email):
         return user
     except User.DoesNotExist:
         return None
+
+
+def verify_email_with_token(token):
+    try:
+        user_profile = UserProfile.objects.get(email_verification_token=token)
+        user = user_profile.user
+
+        if token_generator.check_token(user, token):
+            user_profile.has_email_verified = True
+            user_profile.save()
+            return True, "Email verified successfully."
+        else:
+            return False, "Invalid token. The token is not valid for verifying the email."
+    except (UserProfile.DoesNotExist, TypeError, ValueError, OverflowError):
+        return False, "Invalid token. The token provided does not exist or is malformed."
 
 
 def reset_password_with_token(token, new_password):
