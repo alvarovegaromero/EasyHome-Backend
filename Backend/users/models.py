@@ -8,6 +8,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     reset_password_token = models.CharField(max_length=100, blank=True, null=True)
     has_email_verified = models.BooleanField(default=False)
+    email_verification_token = models.CharField(max_length=100, blank=True, null=True)
 
 
 @receiver(post_save, sender=User)
