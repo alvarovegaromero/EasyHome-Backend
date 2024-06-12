@@ -7,10 +7,10 @@ from Backend.settings import BASE_URL
 from .token_manager import associate_user_with_token, generate_token, token_generator
 
 
-def generate_email_verification_url(user, view_name):
+def generate_email_verification_url(user):
     token = generate_token(user)
     associate_user_with_token(user, token, "email_verification_token")
-    verification_url = reverse(view_name) + f"?token={token}"
+    verification_url = reverse("email-verification") + f"?token={token}"
     return BASE_URL + verification_url
 
 
@@ -30,7 +30,7 @@ def verify_email_with_token(token):
 
 
 def send_email_verification_email(user, verification_url):
-    subject = "Email Verification (YourApplication)"
+    subject = "Email Verification (EasyHome)"
     message = (
         "Hi "
         + user.username
@@ -39,6 +39,6 @@ def send_email_verification_email(user, verification_url):
         + verification_url
         + "\n\n"
         + "Best regards,\n"
-        + "YourApplication Team"
+        + "The EasyHome Team"
     )
     send_email(subject, message, user.email)

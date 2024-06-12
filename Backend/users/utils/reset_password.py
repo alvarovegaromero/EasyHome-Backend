@@ -30,7 +30,7 @@ def reset_password_with_token(token, new_password):
 
 
 def send_password_reset_email(user, reset_url):
-    subject = "Password Reset (YourApplication)"
+    subject = "Password Reset (EasyHome)"
     message = (
         "Hi "
         + user.username
@@ -39,6 +39,6 @@ def send_password_reset_email(user, reset_url):
         + reset_url
         + "\n\n"
         + "Best regards,\n"
-        + "YourApplication Team"
+        + "The EasyHome Team"
     )
     send_email(subject, message, user.email)

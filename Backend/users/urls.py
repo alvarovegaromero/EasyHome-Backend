@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import path
 
+from .views.email_verification.email_verification_view import EmailVerificationAPIView
 from .views.login.login_view import LoginAPIView
 from .views.logout.logout_view import LogoutAPIView
 from .views.my_info_token_view import MyInfoTokenAPIView
@@ -30,5 +31,6 @@ urlpatterns = [
         ResetPasswordRequestAPIView.as_view(),
         name="reset-password-request",
     ),
+    path("email-verification", EmailVerificationAPIView.as_view(), name="email-verification"),
     path("my-info", MyInfoTokenAPIView.as_view(), name="my-info"),
 ]
