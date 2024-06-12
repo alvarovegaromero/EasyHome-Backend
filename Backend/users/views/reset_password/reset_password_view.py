@@ -8,7 +8,7 @@ from utils.functions.get_user_by_email import get_user_by_email
 
 from Backend.settings import BASE_URL
 
-from ...utils.reset_password import generate_reset_url
+from ...utils.reset_password import generate_reset_password_url
 
 
 class ResetPasswordAPIView(APIView):
@@ -20,7 +20,7 @@ class ResetPasswordAPIView(APIView):
             if user is None:
                 return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-            reset_url = generate_reset_url(user)
+            reset_url = generate_reset_password_url(user)
             reset_url = BASE_URL + reset_url
 
             subject = "Password Reset (EasyHome)"
