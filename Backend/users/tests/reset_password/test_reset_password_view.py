@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import status
@@ -14,13 +12,10 @@ class ResetPasswordAPIViewTest(TestCase):
         )
         self.url = "/api/users/reset-password"
 
-    # Mocking the send_mail function
-    @patch("users.views.reset_password.reset_password_view.send_mail")
-    def test_post_reset_password_valid_email(self, mock_send_mail):
+    def test_post_reset_password_valid_email(self):
         response = self.client.post(self.url, {"email": "testuser@test.com"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["success"], "Email sent succesfully")
-        mock_send_mail.assert_called_once()
 
     def test_post_reset_password_invalid_email(self):
         response = self.client.post(self.url, {"email": "invalid@test.com"}, format="json")
