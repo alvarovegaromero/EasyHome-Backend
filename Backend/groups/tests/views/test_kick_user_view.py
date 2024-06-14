@@ -32,6 +32,9 @@ class GroupKickUserAPIViewTest(TestCase):
         self.assertEqual(
             response.data["success"], "User has been succesfully kicked from the group"
         )
+        self.assertFalse(
+            UserGroup.objects.filter(user=self.user_to_kick, group=self.group).exists()
+        )
 
     def test_kick_user_nonexistent_group(self):
         response = self.client.post(f"/api/groups/9999/kick/{self.user_to_kick.id}")
