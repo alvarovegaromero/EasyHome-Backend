@@ -6,6 +6,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ...utils.verify_email import (
+    generate_email_verification_url,
+    send_email_verification_email,
+)
+
 
 class ProfileAPIView(APIView):
     def get(self, request):
@@ -37,6 +42,7 @@ class ProfileAPIView(APIView):
                 email = request.data.get("email")
                 first_name = request.data.get("firstName", "")
                 last_name = request.data.get("lastName", "")
+                changed_email = False
 
                 if not username:
                     return Response(
@@ -58,13 +64,6 @@ class ProfileAPIView(APIView):
                         )
                     user.username = username
 
-                if email != user.email:
-                    if User.objects.filter(email=email).exclude(username=user.username).exists():
-                        return Response(
-                            {"error": "Email already in use"},
-                            status=status.HTTP_400_BAD_REQUEST,
-                        )
-
                 try:
                     validate_email(email)
                 except BaseException:
@@ -73,10 +72,24 @@ class ProfileAPIView(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
+                if email != user.email:
+                    if User.objects.filter(email=email).exclude(username=user.username).exists():
+                        return Response(
+                            {"error": "Email already in use"},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+                    changed_email = True
+
                 user.email = email
                 user.first_name = first_name
                 user.last_name = last_name
                 user.save()
+
+                if changed_email:
+                    user.userprofile.has_email_verified = False
+                    user.userprofile.save()
+                    verification_url = generate_email_verification_url(user)
+                    send_email_verification_email(user, verification_url)
 
                 return Response(
                     {"success": "Profile updated successfully"},
