@@ -5,13 +5,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from shopping_list.models import Product
-from utils.permissions.is_group_owner import IsGroupOwner
+from utils.permissions.is_group_member import IsGroupMember
 
 from ..serializers.product_serializer import ProductSerializer
 
 
 class ProductListCreateAPIView(APIView):
-    permission_classes = (IsAuthenticated, IsGroupOwner)
+    permission_classes = (IsAuthenticated, IsGroupMember)
 
     def get(self, request, group_id):
         try:
