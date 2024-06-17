@@ -11,7 +11,7 @@ from utils.permissions.is_group_member import IsGroupMember
 
 def validate_price(price):  # TODO: move to is_valid from serializer
     try:
-        price = Decimal(price)
+        price = Decimal(str(price))
     except InvalidOperation:
         return False, "Price must be a number"
 
