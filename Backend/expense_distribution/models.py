@@ -23,7 +23,7 @@ class Expense(models.Model):
         """
         Get minimum number of transactions to settle debts between users using
         Cash flow minimization algorithm.
-        Efficiency: O(n*log(n))
+        Efficiency: O(E*D)
         """
 
         net_amounts = {}
